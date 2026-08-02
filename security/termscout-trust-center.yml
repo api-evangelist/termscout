@@ -1,0 +1,21 @@
+generated: '2026-07-21'
+method: searched
+probe: true
+source: https://security.termscout.com/
+url: https://security.termscout.com/
+certifications:
+- SOC 2
+- GDPR
+- CCPA
+documents:
+- Pentest Report
+- Vulnerability Assessment Report
+- Cyber Insurance
+security_contact: infosec@termscout.com
+evidence:
+- source: https://security.termscout.com/
+  keywords:
+  - soc 2
+  - trust center
+  - gdpr
+  - ccpa

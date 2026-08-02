@@ -1,7 +1,28 @@
 aid: termscout
 name: TermScout
-description: TermScout is a company surfaced as a portfolio company of techstars and added to the API
-  Evangelist network as a stub for enrichment. This profile is a lead awaiting the enrichment pipeline.
+description: >-
+  TermScout is a contract intelligence and certification company for legal,
+  procurement, and sales teams. Its platform analyzes and benchmarks commercial
+  agreements against market standards, generates contract signals through
+  Certify (AI contract analysis), and certifies contracts with TrustMark as an
+  external, third-party signal of fairness that helps buyers and sellers close
+  deals faster with less negotiation. TermScout was surfaced as a Techstars
+  portfolio company and profiled in the API Evangelist network. TermScout does
+  not currently publish a public API, developer portal, SDKs, or OpenAPI; its
+  products are delivered through the app.termscout.com web application. This
+  profile captures the company's public web, trust, and security surface.
+accessModel:
+  pricing: unknown
+  onboarding: approval
+  trial: false
+  try_now: false
+  public: false
+  label: Requires approval
+  confidence: medium
+  source: []
+  generated: '2026-07-22'
+  method: derived
+image: https://www.termscout.com/hs-fs/hubfs/Vector%20(21).png
 url: https://raw.githubusercontent.com/api-evangelist/termscout/refs/heads/main/apis.yml
 x-type: company
 x-source: vc-portfolio
@@ -11,9 +32,17 @@ x-tier: stub
 x-tier-reason: portfolio-lead
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-17'
+modified: '2026-07-21'
 tags:
 - Company
+- Legal Tech
+- Contract Intelligence
+- Contract Certification
+- Contract Analysis
+- Procurement
+- Legal Operations
+- Sales Enablement
+- AI
 apis: []
 maintainers:
 - FN: Kin Lane
@@ -23,3 +52,30 @@ maintainers:
 common:
 - type: Website
   url: https://termscout.com/
+- type: Blog
+  url: https://blog.termscout.com
+- type: Support
+  url: https://learn.termscout.com/knowledge
+- type: Pricing
+  url: https://www.termscout.com/termscout-pricing
+- type: Login
+  url: https://app.termscout.com/login
+- type: TermsOfService
+  url: https://www.termscout.com/terms-conditions
+- type: PrivacyPolicy
+  url: https://www.termscout.com/privacy
+- type: TrustCenter
+  url: security/termscout-trust-center.yml
+- type: Compliance
+  url: https://security.termscout.com/
+- type: Security
+  url: https://security.termscout.com/
+- type: VulnerabilityDisclosure
+  url: security/termscout-vulnerability-disclosure.yml
+- type: DomainSecurity
+  url: security/termscout-domain-security.yml
+x-enrichment:
+  date: '2026-07-21'
+  status: enriched
+  artifacts_added: 3
+  pass: local-v1
