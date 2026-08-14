@@ -8,31 +8,40 @@ description: >-
   external, third-party signal of fairness that helps buyers and sellers close
   deals faster with less negotiation. TermScout was surfaced as a Techstars
   portfolio company and profiled in the API Evangelist network. TermScout does
-  not currently publish a public API, developer portal, SDKs, or OpenAPI; its
-  products are delivered through the app.termscout.com web application. This
-  profile captures the company's public web, trust, and security surface.
+  publish a machine-readable contract: an OpenAPI 3.0.1 definition for the
+  "termscout-data" API is served anonymously at https://api.termscout.com/docs,
+  covering contract upload, processing status, extracted fields, citations,
+  predicted labels and red flags, playbook results, and aggregate market data
+  across contract positions. The API itself is key-gated (x-api-key plus an
+  Authorization bearer credential) and access is arranged through sales; there
+  is no self-serve developer portal, SDK, or published API reference. Its
+  end-user products are delivered through the app.termscout.com web
+  application, which also publishes an llms.txt index of public TrustMark
+  contract reports.
 accessModel:
-  pricing: unknown
+  pricing: paid
   onboarding: approval
   trial: false
   try_now: false
   public: false
   label: Requires approval
-  confidence: medium
-  source: []
-  generated: '2026-07-22'
-  method: derived
+  confidence: high
+  source:
+  - https://www.termscout.com/termscout-pricing
+  - https://api.termscout.com/docs
+  generated: '2026-08-14'
+  method: searched
 image: https://www.termscout.com/hs-fs/hubfs/Vector%20(21).png
 url: https://raw.githubusercontent.com/api-evangelist/termscout/refs/heads/main/apis.yml
 x-type: company
 x-source: vc-portfolio
 x-backed-by:
 - techstars
-x-tier: stub
-x-tier-reason: portfolio-lead
+x-tier: profiled
+x-tier-reason: published-openapi-harvested
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-21'
+modified: '2026-08-14'
 tags:
 - Company
 - Legal Tech
@@ -43,7 +52,54 @@ tags:
 - Legal Operations
 - Sales Enablement
 - AI
-apis: []
+- Contract Data
+- Document Analysis
+apis:
+- name: TermScout Data API
+  description: >-
+    The termscout-data API turns a commercial agreement into structured contract
+    intelligence. Callers upload a contract (or point at a hosted public
+    contract URL), poll processing status, then read back extracted fields,
+    citations with source language, predicted labels and confidence scores,
+    predicted red flags, playbook pass/fail detail, a topic-level prediction
+    summary, and a scored contract overview. A separate market-data endpoint
+    returns frequency counts across contract positions so a single contract can
+    be benchmarked against TermScout's corpus. Query parameters are kebab-case
+    and response fields are snake_case. Every request requires both an
+    x-api-key header and an Authorization credential validated by a custom
+    authorizer.
+  humanURL: https://api.termscout.com/docs
+  baseURL: https://api.termscout.com
+  tags:
+  - contract-intelligence
+  - contract-analysis
+  - legal-tech
+  - document-analysis
+  - benchmarking
+  - market-data
+  - legal-operations
+  - procurement
+  properties:
+  - type: OpenAPI
+    url: openapi/termscout-data-openapi.yml
+  - type: Authentication
+    url: authentication/termscout-authentication.yml
+  - type: Conventions
+    url: conventions/termscout-conventions.yml
+  - type: DataModel
+    url: data-model/termscout-data-model.yml
+  - type: ErrorCatalog
+    url: errors/termscout-problem-types.yml
+  - type: Conformance
+    url: conformance/termscout-conformance.yml
+  - type: Overlay
+    url: overlays/termscout-data-overlay.yaml
+  - type: RateLimits
+    url: rate-limits/termscout-rate-limits.yml
+  - type: Lifecycle
+    url: lifecycle/termscout-lifecycle.yml
+  - type: AgentSkill
+    url: skills/_index.yml
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
@@ -74,8 +130,46 @@ common:
   url: security/termscout-vulnerability-disclosure.yml
 - type: DomainSecurity
   url: security/termscout-domain-security.yml
+- type: LLMsTxt
+  url: llms/termscout-llms.txt
+- type: Plans
+  url: plans/termscout-plans-pricing.yml
 x-enrichment:
-  date: '2026-07-21'
+  date: '2026-08-14'
   status: enriched
-  artifacts_added: 3
+  artifacts_added: 23
   pass: local-v1
+x-coverage:
+  state: covered
+  note: >-
+    Round 1 (2026-07-21) recorded TermScout as having no public API. That was
+    wrong, and this round corrected it: STEP 0b contract discovery on the API
+    HOST ROOT found a live OpenAPI 3.0.1 definition served anonymously at
+    https://api.termscout.com/docs (HTTP 200, application/json, 69,776 bytes,
+    11 operations, 21 schemas), and a real provider-published llms.txt at
+    https://app.termscout.com/llms.txt (HTTP 200, 12,386 bytes). Round 1 had
+    checked only the marketing host, where every such path 404s.
+x-not-published:
+  note: >-
+    Verified absences, each probed this round. Recorded so a later round does
+    not re-litigate them and so the gaps are legible to the provider.
+  developer_portal: false
+  api_reference_prose: false
+  getting_started: false
+  sdks: false
+  cli: false
+  postman: false
+  github_org: false
+  status_page: false
+  changelog: false
+  deprecation_policy: false
+  sla: false
+  rate_limits: false
+  error_catalog: false
+  webhooks: false
+  asyncapi: false
+  mcp_server: false
+  agent_card: false
+  well_known_documents: false
+  sandbox: false
+  oauth_scopes: false
