@@ -1,0 +1,75 @@
+generated: '2026-08-14'
+method: searched
+source: https://api.termscout.com/docs
+docs: https://api.termscout.com/docs
+note: >-
+  Upgraded from the mechanical derive with the provider's own statement in
+  info.description of the published termscout-data OpenAPI, plus a live
+  anonymous probe of the API host. Both securitySchemes are applied to every
+  one of the 11 operations as an OR list, but the spec text says both are
+  required together: "All requests require both authentication and an API key."
+summary:
+  types:
+  - apiKey
+  api_key_in:
+  - header
+  requires_both: true
+  self_serve_signup: false
+  onboarding: sales-gated
+schemes:
+- name: api_key
+  type: apiKey
+  in: header
+  parameter: x-api-key
+  description: >-
+    AWS API Gateway usage-plan key. Sent on every request alongside the
+    Authorization header.
+  applied_to: all 11 operations
+  sources:
+  - openapi/termscout-data-openapi.yml
+- name: lambda-api-authorizer
+  type: apiKey
+  in: header
+  parameter: Authorization
+  description: >-
+    Bearer-style credential validated by a custom AWS Lambda request
+    authorizer (x-amazon-apigateway-authtype: custom, authorizer type: token,
+    authorizerResultTtlInSeconds: 0 — so every request is re-authorized with no
+    caching).
+  applied_to: all 11 operations
+  sources:
+  - openapi/termscout-data-openapi.yml
+provider_claims:
+- claim: OAuth and Basic auth are supported
+  source: https://api.termscout.com/docs
+  verbatim: 'Oath and Basic auth are supported.'
+  status: unverified
+  note: >-
+    Stated verbatim (with the typo "Oath") in info.description, but no oauth2 or
+    http/basic securityScheme is declared anywhere in the spec, and no
+    authorization or token endpoint is published. The declared schemes are both
+    apiKey-in-header. Treated as an undocumented claim, not a conformant OAuth
+    surface — this is why no scopes/ artifact was written.
+x-evidence:
+- fetched: '2026-08-14'
+  url: https://api.termscout.com/openapi.json
+  http_status: 403
+  body: '{"message":"Missing Authentication Token"}'
+  note: >-
+    Anonymous request to a non-existent route on the API host. Confirms the API
+    is live and key-gated; AWS API Gateway returns
+    MissingAuthenticationTokenException (x-amzn-errortype header) rather than a
+    401/403 challenge naming a scheme.
+- fetched: '2026-08-14'
+  url: https://api.termscout.com/docs
+  http_status: 200
+  content_type: application/json
+  note: The OpenAPI definition itself is served anonymously; only the data routes are gated.
+key_acquisition:
+  self_serve: false
+  method: contact sales / demo
+  url: https://www.termscout.com/contact-sales
+  note: >-
+    No developer portal, signup form, or key-issuance page was found on
+    termscout.com, app.termscout.com, or learn.termscout.com. The help centre
+    directs all access questions to a demo booking.

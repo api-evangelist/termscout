@@ -1,0 +1,46 @@
+generated: '2026-08-14'
+method: generated
+source: >-
+  Packaged Agent Skills generated from TermScout's own OpenAPI, harvested
+  2026-08-14 from https://api.termscout.com/docs (verbatim original in
+  openapi/_original/termscout-openapi.json, YAML rendering in
+  openapi/termscout-data-openapi.yml). Every path, verb, parameter and response
+  field cited in these skills was verified against that spec.
+note: >-
+  The published definition declares NO operationIds and NO tags, so every skill
+  references its operations by method + path. The operationIds added in
+  overlays/termscout-data-overlay.yaml are API Evangelist vocabulary and
+  TermScout will not recognise them — do not send them anywhere. Cross-cutting
+  rules cite ../authentication/, ../conventions/, ../errors/, ../data-model/
+  and ../rate-limits/.
+coverage:
+  operations_in_spec: 11
+  operations_covered: 11
+skills:
+- file: termscout-analyze-a-contract.md
+  name: Analyze a contract end to end
+  api: openapi/termscout-data-openapi.yml
+  operations:
+  - POST /contracts
+  - GET /contracts/{contract-id}/status
+  - GET /contracts/{contract-id}/overview
+  - GET /contracts/{contract-id}/extracted-fields
+  - GET /contracts/{contract-id}/citations
+  - GET /contracts
+- file: termscout-review-red-flags-and-playbook.md
+  name: Review red flags and playbook results
+  api: openapi/termscout-data-openapi.yml
+  operations:
+  - GET /contracts/{contract-id}/prediction-flags
+  - GET /contracts/{contract-id}/prediction-detail
+  - GET /contracts/{contract-id}/prediction-summary
+  - GET /contracts/{contract-id}/playbook-detail
+  - GET /contracts/{contract-id}/citations
+  - GET /contracts/{contract-id}/status
+- file: termscout-benchmark-against-market.md
+  name: Benchmark a contract term against market data
+  api: openapi/termscout-data-openapi.yml
+  operations:
+  - GET /contract-positions
+  - GET /contracts/{contract-id}/overview
+  - GET /contracts/{contract-id}/prediction-detail

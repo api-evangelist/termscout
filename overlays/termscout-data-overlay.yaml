@@ -1,0 +1,127 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for the TermScout Data API
+  version: 1.0.0
+x-generated: '2026-08-14'
+x-method: generated
+x-source: openapi/termscout-data-openapi.yml
+x-note: >-
+  Captures API Evangelist's enhancements to the published termscout-data
+  definition WITHOUT mutating it. The harvested original is preserved verbatim
+  at openapi/_original/termscout-openapi.json. The provider's spec declares no
+  operationIds and no tags, which makes every operation unaddressable by name
+  and ungroupable; this overlay adds both, plus the error responses the spec
+  omits entirely. The operationIds and tags below are API Evangelist
+  vocabulary derived from each operation's own summary — they are NOT
+  TermScout-published identifiers, and a consumer must not expect TermScout to
+  recognise them.
+extends: openapi/termscout-data-openapi.yml
+
+actions:
+- target: $.info
+  update:
+    x-apievangelist-profile: https://apis.io/provider/termscout/
+    x-apievangelist-harvested: '2026-08-14'
+    x-apievangelist-source: https://api.termscout.com/docs
+    x-apievangelist-note: >-
+      Definition served anonymously at https://api.termscout.com/docs; the data
+      routes themselves require x-api-key plus an Authorization credential.
+
+- target: $
+  update:
+    tags:
+    - name: Contracts
+      description: Submitting contracts and reading their processing status and overview.
+    - name: Analysis
+      description: >-
+        Extracted fields, citations, predicted labels, red flags, prediction
+        summaries and playbook results for a submitted contract.
+    - name: Market Data
+      description: Aggregate benchmarking data across TermScout's contract corpus.
+
+- target: $.paths['/contracts'].get
+  update:
+    operationId: listContracts
+    tags: [Contracts]
+
+- target: $.paths['/contracts'].post
+  update:
+    operationId: uploadContract
+    tags: [Contracts]
+    x-apievangelist-note: >-
+      The only write operation. Declares no requestBody — every input including
+      the document reference travels as a query parameter. Omitting contract-id
+      creates a new contract; supplying it updates the existing one. There is no
+      idempotency key, so a naive retry duplicates the contract.
+
+- target: $.paths['/contracts/{contract-id}/status'].get
+  update:
+    operationId: getContractStatus
+    tags: [Contracts]
+    x-apievangelist-note: >-
+      Poll this until processing completes before calling any analysis
+      operation. ContractStatus.status is an untyped string with no enum, so
+      terminal values are undocumented.
+
+- target: $.paths['/contracts/{contract-id}/overview'].get
+  update:
+    operationId: getContractOverview
+    tags: [Contracts]
+
+- target: $.paths['/contracts/{contract-id}/extracted-fields'].get
+  update:
+    operationId: getContractExtractedFields
+    tags: [Analysis]
+
+- target: $.paths['/contracts/{contract-id}/citations'].get
+  update:
+    operationId: getContractCitations
+    tags: [Analysis]
+
+- target: $.paths['/contracts/{contract-id}/prediction-detail'].get
+  update:
+    operationId: getContractPredictionDetail
+    tags: [Analysis]
+
+- target: $.paths['/contracts/{contract-id}/prediction-flags'].get
+  update:
+    operationId: getContractPredictionFlags
+    tags: [Analysis]
+
+- target: $.paths['/contracts/{contract-id}/prediction-summary'].get
+  update:
+    operationId: getContractPredictionSummary
+    tags: [Analysis]
+
+- target: $.paths['/contracts/{contract-id}/playbook-detail'].get
+  update:
+    operationId: getContractPlaybookDetail
+    tags: [Analysis]
+
+- target: $.paths['/contract-positions'].get
+  update:
+    operationId: getContractPositions
+    tags: [Market Data]
+
+- target: $.components.schemas.Citation.properties
+  update:
+    source_langauge:
+      type: string
+      description: >-
+        Source language backing the citation. NOTE: the property name is
+        misspelled in the published definition ("langauge"); the equivalent
+        field on ExtractedField and PredictionDetailLabel is source_language.
+        Preserved as published — correcting it would break the contract.
+
+- target: $.components.schemas.testUpload
+  update:
+    deprecated: true
+    description: >-
+      Unreferenced by any operation and identical in shape to ContractUpload.
+      Appears to be a test artifact left in the published definition.
+
+- target: $.components.schemas.Empty
+  update:
+    description: >-
+      Declared with no properties and referenced by no operation in the
+      published definition.

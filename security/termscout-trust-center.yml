@@ -1,8 +1,16 @@
-generated: '2026-07-21'
+generated: '2026-08-14'
 method: searched
 probe: true
 source: https://security.termscout.com/
 url: https://security.termscout.com/
+vendor: SafeBase
+vendor_note: >-
+  The trust centre is hosted by SafeBase on TermScout's own subdomain
+  (security.termscout.com). The certifications and documents below are
+  TermScout's; the hosting platform is SafeBase's. Note that the
+  /.well-known/ OAuth and OIDC documents served at this hostname describe
+  SafeBase's own MCP authorization server, NOT a TermScout surface — see
+  well-known/termscout-well-known.yml.
 certifications:
 - SOC 2
 - GDPR
@@ -12,10 +20,22 @@ documents:
 - Vulnerability Assessment Report
 - Cyber Insurance
 security_contact: infosec@termscout.com
+access: >-
+  Overview and certification badges are public; the underlying documents are
+  gated behind an NDA/request flow typical of a SafeBase trust centre.
 evidence:
 - source: https://security.termscout.com/
+  http_status: 200
+  fetched: '2026-08-14'
   keywords:
   - soc 2
   - trust center
   - gdpr
   - ccpa
+note: >-
+  CCPA, the documents list and security_contact were captured by the 2026-07-21
+  search and are retained here. The 2026-08-14 automated re-probe returned a
+  thinner result (SOC 2 + GDPR only, no documents) because the trust centre is a
+  JS-rendered SafeBase application and the keyword probe reads only what is in
+  the served HTML. Retained per the pipeline's idempotency rule — a re-run must
+  not downgrade a richer artifact of equal method.

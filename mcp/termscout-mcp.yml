@@ -1,0 +1,234 @@
+generated: '2026-08-14'
+method: derived
+status: candidate
+source: openapi/termscout-data-openapi.yml
+note: >-
+  TermScout ships NO MCP server. This is a DERIVED candidate tool list, one tool
+  per operation in the published termscout-data OpenAPI, provided so an
+  integrator can stand one up. It is not a TermScout product and no MCPServer
+  pointer is wired into apis.yml.
+
+deployment:
+  mode: none
+  auth: api-key
+  verified: derived
+  note: >-
+    Nothing to reach. No hosted endpoint and no installable package exist, so
+    endpoint/install/package are deliberately absent rather than guessed. auth
+    records what a server WOULD need (x-api-key + Authorization), taken from the
+    spec's securitySchemes.
+
+search_evidence:
+  searched:
+  - target: MCP path on the API host
+    url: https://api.termscout.com/mcp
+    status: 403
+    detail: AWS API Gateway MissingAuthenticationTokenException — route not configured.
+  - target: MCP subdomain
+    url: https://mcp.termscout.com/mcp
+    status: 000
+    detail: DNS resolution failure.
+  - target: npm registry
+    url: https://registry.npmjs.org/-/v1/search?text=termscout
+    status: 200
+    detail: 0 results.
+  - target: PyPI
+    url: https://pypi.org/pypi/termscout/json
+    status: 404
+  - target: GitHub organisation
+    url: https://api.github.com/orgs/termscout
+    status: 404
+    detail: >-
+      No organisation. github.com/termscout is a personal user account (id
+      59789650) with 0 public repositories.
+  - target: SafeBase trust-centre MCP on the security subdomain
+    url: https://security.termscout.com/mcp
+    status: 404
+    detail: >-
+      The /.well-known OAuth documents served at security.termscout.com describe
+      an MCP server, but its issuer and resource are both
+      https://app.safebase.io/api/mcp — SafeBase's own trust-centre MCP, not
+      TermScout's. Explicitly NOT counted as a TermScout MCP surface. See
+      well-known/termscout-well-known.yml.
+  conclusion: No first-party or third-party TermScout MCP server exists.
+
+server:
+  name: termscout-data
+  transport: http
+  url: null
+
+tools_note: >-
+  The published spec declares NO operationIds, so each candidate tool below
+  names its backing operation by method + path. Tool names are our own
+  snake_case derivation from the operation summaries; they are not TermScout
+  vocabulary. Input schemas are real — they are the operation's declared query
+  and path parameters, verbatim from the spec.
+
+tools:
+- name: list_contracts
+  description: List the customer's contracts with id, status and template.
+  source_operation: openapi/termscout-data-openapi.yml#GET /contracts
+  inputs: []
+  returns: ContractList
+- name: upload_contract
+  description: >-
+    Submit a contract for analysis, or replace the document on an existing one.
+    Returns contract_id and document_id.
+  source_operation: openapi/termscout-data-openapi.yml#POST /contracts
+  inputs:
+  - name: document-name
+    in: query
+    required: true
+  - name: template-id
+    in: query
+    required: true
+  - name: defined-term
+    in: query
+    required: false
+  - name: url
+    in: query
+    required: false
+  - name: contract-id
+    in: query
+    required: false
+  - name: party-b-defined-term
+    in: query
+    required: false
+  - name: document-id
+    in: query
+    required: false
+  - name: party-a-defined-term
+    in: query
+    required: false
+  - name: contract-position-id
+    in: query
+    required: false
+  - name: review-level
+    in: query
+    required: false
+  - name: is-public
+    in: query
+    required: false
+  returns: ContractUpload
+  write_operation: true
+  note: >-
+    The only write in the API. An agent must treat this as consequential: called
+    without contract-id it creates a new contract rather than updating one, and
+    there is no idempotency key.
+- name: get_contract_status
+  description: >-
+    Poll processing status for a contract. Must return complete before the
+    prediction/citation/extracted-field tools yield meaningful data.
+  source_operation: openapi/termscout-data-openapi.yml#GET /contracts/{contract-id}/status
+  inputs:
+  - name: contract-id
+    in: path
+    required: true
+  returns: ContractStatus
+- name: get_contract_overview
+  description: >-
+    Scored overview for a contract — parties, rating, percentile against market,
+    category and TrustMark badge URLs.
+  source_operation: openapi/termscout-data-openapi.yml#GET /contracts/{contract-id}/overview
+  inputs:
+  - name: contract-id
+    in: path
+    required: true
+  returns: ContractOverview
+- name: get_extracted_fields
+  description: Key data points extracted from a contract, with citations and source language.
+  source_operation: openapi/termscout-data-openapi.yml#GET /contracts/{contract-id}/extracted-fields
+  inputs:
+  - name: contract-id
+    in: path
+    required: true
+  returns: ExtractedFields
+- name: get_citations
+  description: >-
+    Citations and source language for a contract, optionally filtered to a
+    question, label or topic.
+  source_operation: openapi/termscout-data-openapi.yml#GET /contracts/{contract-id}/citations
+  inputs:
+  - name: contract-id
+    in: path
+    required: true
+  - name: question-id
+    in: query
+    required: false
+  - name: label-id
+    in: query
+    required: false
+  - name: topic-id
+    in: query
+    required: false
+  returns: Citations
+- name: get_prediction_detail
+  description: Predicted labels for a contract, grouped by topic, with confidence scores.
+  source_operation: openapi/termscout-data-openapi.yml#GET /contracts/{contract-id}/prediction-detail
+  inputs:
+  - name: contract-id
+    in: path
+    required: true
+  returns: PredictionDetail
+- name: get_prediction_flags
+  description: Predicted red flags for a contract, grouped into named buckets with counts.
+  source_operation: openapi/termscout-data-openapi.yml#GET /contracts/{contract-id}/prediction-flags
+  inputs:
+  - name: contract-id
+    in: path
+    required: true
+  returns: PredictionFlags
+- name: get_prediction_summary
+  description: Narrative prediction summary for one topic on one contract.
+  source_operation: openapi/termscout-data-openapi.yml#GET /contracts/{contract-id}/prediction-summary
+  inputs:
+  - name: contract-id
+    in: path
+    required: true
+  - name: topic-id
+    in: query
+    required: true
+  returns: PredictionSummary
+- name: get_playbook_detail
+  description: >-
+    Playbook pass/fail results for a contract, per question, against required,
+    acceptable and unacceptable label sets.
+  source_operation: openapi/termscout-data-openapi.yml#GET /contracts/{contract-id}/playbook-detail
+  inputs:
+  - name: contract-id
+    in: path
+    required: true
+  - name: filter-id
+    in: query
+    required: false
+  returns: PlaybookDetail
+- name: get_contract_positions
+  description: >-
+    Aggregate market frequency counts across contract positions, optionally
+    narrowed to a label, for benchmarking a contract against TermScout's corpus.
+  source_operation: openapi/termscout-data-openapi.yml#GET /contract-positions
+  inputs:
+  - name: template-id
+    in: query
+    required: true
+  - name: label-id
+    in: query
+    required: false
+  - name: selected
+    in: query
+    required: false
+  returns: ContractPositions
+
+implementation_caveats:
+- >-
+  Five entities an agent must supply ids for — template, label, topic, question,
+  filter — have no list endpoint in the API. A usable MCP server would need to
+  ship those id vocabularies out of band or the agent cannot construct a valid
+  call. This is the main blocker to a working server, not the tool wiring.
+- >-
+  The workflow is asynchronous with no webhook: upload_contract then poll
+  get_contract_status. ContractStatus.status is an untyped string with no enum,
+  so terminal-state detection has to be discovered empirically.
+- >-
+  No error responses are declared in the spec, so a server has no documented
+  failure contract to map to MCP errors. See errors/termscout-problem-types.yml.

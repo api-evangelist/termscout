@@ -1,0 +1,136 @@
+generated: '2026-08-14'
+method: probed
+source: live probes of every TermScout host, 2026-08-14
+pointer_emitted: false
+pointer_reason: >-
+  NO WellKnown, SecurityTxt or APICatalog pointer is wired into apis.yml. Read
+  the two findings below before changing that. TermScout itself serves no
+  /.well-known document anywhere: every path 404s on the marketing, docs, blog
+  and API hosts. The only 200s in this file are (a) an SPA catch-all that
+  answers 200 with the same HTML shell for every path, and (b) three genuine
+  JSON documents that belong to SafeBase, TermScout's third-party trust-centre
+  vendor, and describe SafeBase's own MCP authorization server rather than
+  anything TermScout operates. Crediting either as a TermScout discovery surface
+  would be a false presence.
+
+hosts_probed:
+- termscout.com
+- www.termscout.com
+- api.termscout.com
+- app.termscout.com
+- learn.termscout.com
+- security.termscout.com
+- blog.termscout.com
+
+paths_probed:
+- /.well-known/security.txt
+- /.well-known/openid-configuration
+- /.well-known/oauth-authorization-server
+- /.well-known/oauth-protected-resource
+- /.well-known/api-catalog
+- /.well-known/ai-plugin.json
+- /.well-known/agent-card.json
+- /.well-known/agent.json
+
+results:
+- host: https://termscout.com
+  outcome: all-404
+  status: 404
+  content_type: text/html
+  note: HubSpot 404 page (60339 bytes) on all eight paths.
+- host: https://www.termscout.com
+  outcome: all-404
+  status: 404
+  content_type: text/html
+  note: HubSpot 404 page (60339 bytes) on all eight paths.
+- host: https://learn.termscout.com
+  outcome: all-404
+  status: 404
+  content_type: text/html
+  note: Help-centre 404 page (60033 bytes) on all eight paths.
+- host: https://blog.termscout.com
+  outcome: all-404
+  status: 404
+  content_type: text/html
+  note: Blog 404 page (59957 bytes) on all eight paths.
+- host: https://api.termscout.com
+  outcome: all-403
+  status: 403
+  content_type: application/json
+  note: >-
+    AWS API Gateway MissingAuthenticationTokenException on all eight paths — the
+    /.well-known prefix is simply not a configured route. Not a document.
+- host: https://app.termscout.com
+  outcome: false-positive-spa
+  status: 200
+  content_type: text/html
+  size: 6217
+  note: >-
+    REJECTED. Returns HTTP 200 with a byte-identical 6217-byte HTML SPA shell
+    for all eight paths, including /.well-known/agent-card.json and
+    /.well-known/agent.json. This is the single-page-app catch-all documented as
+    the dominant false positive on this probe. No document is served; no
+    pointer, and specifically no AgentCard, is emitted.
+- host: https://security.termscout.com
+  outcome: third-party-documents
+  note: >-
+    Three paths return real, parseable JSON. They are NOT TermScout's. See
+    third_party_documents below.
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+    content_type: text/html
+  - path: /.well-known/openid-configuration
+    status: 200
+    content_type: application/json
+    file: termscout-security-subdomain-openid-configuration.json
+    owner: SafeBase
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+    content_type: application/json
+    file: termscout-security-subdomain-oauth-authorization-server.json
+    owner: SafeBase
+  - path: /.well-known/oauth-protected-resource
+    status: 200
+    content_type: application/json
+    file: termscout-security-subdomain-oauth-protected-resource.json
+    owner: SafeBase
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+
+third_party_documents:
+  vendor: SafeBase
+  reasoning: >-
+    security.termscout.com is TermScout's trust centre, hosted by SafeBase (now
+    part of Drata). The DNS name is TermScout's, but every byte of the response
+    is SafeBase's application — the 404 page title is "SafeBase", assets load
+    from cdn.safebase.io, and the served discovery documents name
+    https://app.safebase.io/api/mcp as issuer, authorization server, token
+    endpoint and protected resource, with service_documentation at
+    https://docs.safebase.io/mcp. Nothing in them refers to TermScout or to any
+    TermScout-operated endpoint. Under the pipeline's ownership rule a document
+    is judged by what it says about itself, not by where it was fetched, so
+    these are recorded as vendor boilerplate reachable at a TermScout hostname —
+    not as a TermScout discovery surface. Saved verbatim for auditability only.
+  issuer: https://app.safebase.io/api/mcp
+  implies_termscout_mcp: false
+  note: >-
+    These documents advertise an MCP authorization server. That server is
+    SafeBase's shared trust-centre MCP, not a TermScout API surface, and
+    https://security.termscout.com/mcp returns SafeBase's 404 page. No MCPServer
+    pointer is warranted.
+
+summary:
+  paths_returning_a_real_termscout_document: 0
+  security_txt: false
+  openid_configuration: false
+  oauth_authorization_server: false
+  api_catalog: false
+  ai_plugin: false
+  agent_card: false

@@ -1,0 +1,66 @@
+generated: '2026-08-14'
+method: searched
+source: https://api.termscout.com/docs
+limit_count: 0
+documented: false
+note: >-
+  TermScout publishes no rate limits for the termscout-data API. Searched the
+  published OpenAPI (no x-rate-limit extensions, no 429 response declared on any
+  of the 11 operations), the pricing page, the learn.termscout.com help centre
+  and its full sitemap, and the marketing site. Nothing states a request rate, a
+  quota, a burst allowance or a throttling policy. An honest zero.
+
+limits: []
+
+response_headers:
+  documented: []
+  observed: []
+  note: >-
+    No RateLimit-*, X-RateLimit-* or Retry-After header was observed on any
+    anonymous response from api.termscout.com. Only the AWS request-tracing
+    headers (x-amzn-requestid, x-amz-apigw-id, x-amzn-trace-id) are returned.
+    The data routes are key-gated, so a limit could only be confirmed with
+    credentials — which this pipeline does not use.
+
+exhaustion_status_code:
+  documented: null
+  note: >-
+    Not published. No 429 response is declared anywhere in the spec.
+
+platform_inference:
+  confidence: low
+  note: >-
+    NOT A TERMSCOUT STATEMENT. The API is fronted by AWS API Gateway and the
+    spec declares a usage-plan-style x-api-key securityScheme, which implies
+    per-key throttling and quota are configurable server-side and that
+    exhaustion would surface as HTTP 429 with the API Gateway
+    LimitExceededException/ThrottlingException envelope. TermScout publishes
+    none of the actual values, so an integrator cannot size against this and
+    must ask their account contact.
+  implied_status: 429
+  implied_envelope: '{"message": "..."}'
+
+evidence:
+- url: https://api.termscout.com/docs
+  status: 200
+  fetched: '2026-08-14'
+  detail: Published OpenAPI declares no 429 responses and no rate-limit extensions.
+- url: https://api.termscout.com/
+  status: 403
+  fetched: '2026-08-14'
+  detail: No rate-limit headers present on the anonymous response.
+- url: https://www.termscout.com/termscout-pricing
+  status: 200
+  fetched: '2026-08-14'
+  detail: No API quota or call volume attached to any published tier.
+- url: https://learn.termscout.com/sitemap.xml
+  status: 200
+  fetched: '2026-08-14'
+  detail: No rate-limit, quota or API-usage article in the help centre.
+
+gaps_to_raise_with_provider:
+- Publish the per-key request rate and any monthly quota.
+- Declare a 429 response on the operations and emit RateLimit-* or Retry-After headers.
+- State the expected poll interval for GET /contracts/{contract-id}/status, since
+  the submit-then-poll workflow has no webhook alternative and unguided polling
+  is the most likely way a consumer trips an undisclosed limit.

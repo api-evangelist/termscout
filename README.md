@@ -42,6 +42,10 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-TermScout is a company surfaced as a portfolio company of techstars and added to the API Evangelist network as a stub for enrichment. This profile is a lead awaiting the enrichment pipeline.
+TermScout is a contract intelligence and certification company for legal, procurement, and sales teams. It analyzes and benchmarks commercial agreements against market standards through Certify, and certifies them with TrustMark as a third-party signal of fairness.
+
+TermScout publishes a machine-readable contract. An OpenAPI 3.0.1 definition for the `termscout-data` API is served anonymously at [https://api.termscout.com/docs](https://api.termscout.com/docs) — 11 operations covering contract upload, processing status, extracted fields, citations, predicted labels and red flags, playbook results, and aggregate market data across contract positions. The API itself is key-gated (`x-api-key` plus an `Authorization` credential) and access is arranged through sales.
+
+There is no developer portal, prose API reference, SDK, CLI, Postman collection, status page, changelog, or published rate limit, and the definition declares no operationIds, no tags, and no error responses. TermScout does publish a real `llms.txt` at [https://app.termscout.com/llms.txt](https://app.termscout.com/llms.txt), indexing its public TrustMark contract reports, and a staffed trust centre at [https://security.termscout.com/](https://security.termscout.com/).
 
 Backed by: techstars — https://termscout.com/

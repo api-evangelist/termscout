@@ -1,0 +1,54 @@
+generated: '2026-08-14'
+method: searched
+source: registry searches, 2026-08-14
+package_count: 0
+official_package_count: 0
+pointer_emitted: false
+pointer_reason: >-
+  No Packages or SDKs pointer is wired into apis.yml. This file records a
+  verified absence, not a distribution surface — emitting a pointer would credit
+  TermScout with client libraries it does not ship.
+packages: []
+
+note: >-
+  TermScout publishes no client libraries in any language. The termscout-data
+  API is consumed by raw HTTP only. There is also no first-party source to
+  derive candidates from: apis.yml carries no SDK, CLI or SourceCode link, and
+  the published OpenAPI contains no x-codeSamples or SDK references.
+
+searched:
+- registry: npm
+  url: https://registry.npmjs.org/-/v1/search?text=termscout
+  status: 200
+  result: 0 packages
+- registry: pypi
+  url: https://pypi.org/pypi/termscout/json
+  status: 404
+  result: not found
+- registry: github
+  url: https://api.github.com/orgs/termscout
+  status: 404
+  result: >-
+    No GitHub organisation exists. github.com/termscout is a personal user
+    account (id 59789650, created as a User node type) with 0 public
+    repositories, so there is no source-code surface to package.
+- registry: github-search
+  url: https://api.github.com/search/repositories?q=termscout
+  status: 200
+  result: >-
+    1 result, which is api-evangelist/termscout — this profile repository
+    itself. No TermScout-authored repository exists publicly.
+- registry: docs
+  url: https://api.termscout.com/docs
+  status: 200
+  result: >-
+    The published OpenAPI declares no SDK extensions and the provider publishes
+    no developer portal or SDK page to search.
+
+not_searched:
+  note: >-
+    Maven Central, NuGet, pkg.go.dev, RubyGems, Packagist and crates.io were not
+    individually queried. With zero packages on npm and PyPI, no GitHub
+    organisation, no public repositories, and no developer portal, there is no
+    evidence of any first-party distribution to look for. Recorded honestly
+    rather than claimed as a completed sweep.

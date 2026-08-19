@@ -1,0 +1,157 @@
+generated: '2026-08-14'
+method: derived
+source: openapi/termscout-data-openapi.yml
+docs: https://api.termscout.com/docs
+note: >-
+  Cross-cutting runtime semantics for the termscout-data API, derived from the
+  published OpenAPI 3.0.1 definition and a live anonymous probe of the API host.
+  TermScout publishes no prose API reference, so anything not stated in the spec
+  is recorded as undocumented rather than guessed.
+
+naming:
+  query_parameters: kebab-case
+  response_fields: snake_case
+  source: https://api.termscout.com/docs
+  verbatim: 'All query params are `kebob-case`, all responses are `snake_case`'
+  note: >-
+    Stated by the provider in info.description (spelled "kebob-case"). Verified
+    against every operation: all 14 distinct query parameters and both path
+    parameters use kebab-case (template-id, label-id, contract-id,
+    party-a-defined-term, ...), and all 21 response schemas use snake_case
+    (contract_id, source_language, rating_percentile, ...).
+  inconsistency:
+    - field: source_langauge
+      schema: Citation
+      note: >-
+        Misspelled in the published spec ("langauge"). The sibling field on
+        ExtractedField and PredictionDetailLabel is spelled source_language.
+        Recorded as-is; consumers must handle both spellings.
+
+authentication:
+  style: dual header credential
+  headers:
+  - x-api-key
+  - Authorization
+  detail: authentication/termscout-authentication.yml
+
+request_semantics:
+  parameters_in: query
+  note: >-
+    Every input on this API travels as a query parameter, including the contract
+    upload. POST /contracts declares NO requestBody at all — document-name,
+    template-id, url, party-a-defined-term, review-level and eight other inputs
+    are all query parameters on the POST. This is unusual and worth flagging to
+    consumers: there is no documented multipart or binary body for submitting
+    the contract file itself, only a `url` parameter pointing at a hosted public
+    contract.
+  content_type_in: none declared
+  content_type_out: application/json
+
+idempotency:
+  supported: false
+  idempotency_key_header: null
+  note: >-
+    No Idempotency-Key header, no idempotent-replay semantics, and no retry
+    guidance are documented anywhere in the spec or on the provider's site. The
+    only convergence mechanism is an UPSERT: POST /contracts accepts an optional
+    `contract-id` query parameter described as "If supplied, will update
+    existing contract with new document" (and `document-id` "Include if
+    replacing document"). That makes a repeat call converge on the same record
+    when the caller tracks the id itself, but it is client-managed upsert, not
+    provider-guaranteed idempotency, so no Idempotency pointer is wired in
+    apis.yml. A caller that retries a bare POST /contracts without contract-id
+    will create a duplicate contract.
+  upsert:
+    operation: POST /contracts
+    key_parameters:
+    - contract-id
+    - document-id
+
+pagination:
+  supported: false
+  note: >-
+    GET /contracts returns a bare JSON array (ContractList) with no envelope, no
+    cursor, no limit/offset parameters and no total count. GET
+    /contract-positions, /citations and /extracted-fields likewise return
+    unbounded top-level arrays. There is no documented way to page a large
+    account, and no documented cap on response size.
+
+filtering:
+  supported: partial
+  note: >-
+    Filtering is per-endpoint via optional query parameters rather than a shared
+    convention — citations filter by question-id/label-id/topic-id,
+    playbook-detail by filter-id, contract-positions by label-id/selected.
+  parameters:
+  - endpoint: GET /contract-positions
+    filters: [label-id, selected]
+  - endpoint: GET /contracts/{contract-id}/citations
+    filters: [question-id, label-id, topic-id]
+  - endpoint: GET /contracts/{contract-id}/playbook-detail
+    filters: [filter-id]
+
+field_expansion:
+  supported: false
+  note: No sparse-fieldset, expand, or include parameter is declared.
+
+metadata:
+  supported: false
+  note: No customer-defined metadata field is exposed on any schema.
+
+request_tracing:
+  documented: false
+  observed_headers:
+  - x-amzn-requestid
+  - x-amz-apigw-id
+  - x-amzn-trace-id
+  note: >-
+    Not documented by the provider, but AWS API Gateway returns these on every
+    response including the anonymous 403 observed on 2026-08-14. x-amzn-requestid
+    is the value to quote to support; there is no branded request-id header.
+  method: probed
+  evidence_url: https://api.termscout.com/
+
+versioning:
+  scheme: none-in-path
+  current: null
+  note: >-
+    No version segment in any path and no version header is documented. The
+    spec's info.version is an AWS API Gateway export stamp
+    ("2022-07-19T16:30:18Z"), which is a deployment timestamp rather than a
+    consumer-facing version. Consumers have no published signal for detecting a
+    breaking change.
+  detail: lifecycle/termscout-lifecycle.yml
+
+error_envelope:
+  format: non-standard
+  shape: '{"message": "<text>"}'
+  problem_json: false
+  note: >-
+    The spec declares NO 4xx or 5xx responses on any of the 11 operations — only
+    200. The envelope recorded here is the AWS API Gateway default observed live
+    on an anonymous request, not a documented contract.
+  detail: errors/termscout-problem-types.yml
+
+rate_limit_signaling:
+  documented: false
+  headers: []
+  note: >-
+    No published limits and no RateLimit-*/X-RateLimit-*/Retry-After headers were
+    observed on the anonymous responses available to probe. AWS API Gateway usage
+    plans (implied by the x-api-key scheme) return 429 with
+    LimitExceededException when a plan quota is exceeded, but TermScout publishes
+    no numbers.
+  detail: rate-limits/termscout-rate-limits.yml
+
+async_processing:
+  pattern: submit-then-poll
+  note: >-
+    The core workflow is asynchronous but there is no callback surface. A caller
+    POSTs a contract, receives contract_id + document_id, then polls GET
+    /contracts/{contract-id}/status until processing completes before the
+    prediction, citation and extracted-field endpoints return meaningful data.
+    No webhook, no callback URL parameter, no event stream, and no documented
+    poll interval or terminal status vocabulary — ContractStatus.status is an
+    untyped string with no enum.
+  polling_endpoint: GET /contracts/{contract-id}/status
+  webhooks: false

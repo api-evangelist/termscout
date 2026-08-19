@@ -1,0 +1,134 @@
+# TermScout
+
+> TermScout is the contract rating company. We publish independent contract intelligence reports — attorney-backed analysis, fairness scoring, and industry benchmarks across 600+ data points per contract. Each report below is a public review of a real vendor's published terms.
+
+## Certified Contract Reports
+
+Standard SaaS and software contract reviews with full TrustMark certification.
+
+- [Poppulo Contract Intelligence Report](https://app.termscout.com/certify/poppulo-certified-contract)
+- [Nasdaq Contract Intelligence Report](https://app.termscout.com/certify/nasdaq-certified-contract)
+- [Transcend Contract Intelligence Report](https://app.termscout.com/certify/transcend-certified-contract)
+- [Deepwatch Contract Intelligence Report](https://app.termscout.com/certify/deepwatch-certified-contract)
+- [Superhuman Contract Intelligence Report](https://app.termscout.com/certify/superhuman-certified-contract)
+- [Ibm Csa Contract Intelligence Report](https://app.termscout.com/certify/ibm-csa-certified-contract)
+- [Lenovo Services Contract Intelligence Report](https://app.termscout.com/certify/lenovo-services-certified-contract)
+- [Workato Contract Intelligence Report](https://app.termscout.com/certify/workato-certified-contract)
+- [Nexthink Contract Intelligence Report](https://app.termscout.com/certify/nexthink-certified-contract)
+- [Corelight Contract Intelligence Report](https://app.termscout.com/certify/corelight-certified-contract)
+- [Bmc Contract Intelligence Report](https://app.termscout.com/certify/bmc-certified-contract)
+- [Qualtrics Contract Intelligence Report](https://app.termscout.com/certify/qualtrics-certified-contract)
+- [Kx Contract Intelligence Report](https://app.termscout.com/certify/kx-certified-contract)
+- [Ibm Cra Contract Intelligence Report](https://app.termscout.com/certify/ibm-cra-certified-contract)
+- [Sprinto Certifed Contract Contract Intelligence Report](https://app.termscout.com/certify/sprinto-certifed-contract)
+- [Avaya Contract Intelligence Report](https://app.termscout.com/certify/avaya-certified-contract)
+- [Automox Contract Intelligence Report](https://app.termscout.com/certify/automox-certified-contract)
+- [Payactiv Contract Intelligence Report](https://app.termscout.com/certify/payactiv-certified-contract)
+- [Figma Contract Intelligence Report](https://app.termscout.com/certify/figma-certified-contract)
+- [Kapta Contract Intelligence Report](https://app.termscout.com/certify/kapta-certified-contract)
+- [Siemens Contract Intelligence Report](https://app.termscout.com/certify/siemens-certified-contract)
+- [Rapid7 Contract Intelligence Report](https://app.termscout.com/certify/rapid7-certified-contract)
+- [Rapidratings Contract Intelligence Report](https://app.termscout.com/certify/rapidratings-certified-contract)
+- [Freshworks Contract Intelligence Report](https://app.termscout.com/certify/freshworks-certified-contract)
+- [Cobalt Contract Intelligence Report](https://app.termscout.com/certify/cobalt-certified-contract)
+- [Contentful Uk Contract Intelligence Report](https://app.termscout.com/certify/contentful-uk-certified-contract)
+- [Catchpoint Contract Intelligence Report](https://app.termscout.com/certify/catchpoint-certified-contract)
+- [Openspace Contract Intelligence Report](https://app.termscout.com/certify/openspace-certified-contract)
+- [Pricefx Contract Intelligence Report](https://app.termscout.com/certify/pricefx-certified-contract)
+- [Onboard Contract Intelligence Report](https://app.termscout.com/certify/onboard-certified-contract)
+- [Reach Contract Intelligence Report](https://app.termscout.com/certify/reach-certified-contract)
+- [Workhuman Contract Intelligence Report](https://app.termscout.com/certify/workhuman-certified-contract)
+- [Equinix Test  Contract Intelligence Report](https://app.termscout.com/certify/equinix-test-)
+- [Lansweeper Contract Intelligence Report](https://app.termscout.com/certify/lansweeper-certified-contract)
+- [Contentful Gmbh Contract Intelligence Report](https://app.termscout.com/certify/contentful-gmbh-certified-contract)
+- [Kx Systems Mla Contract Intelligence Report](https://app.termscout.com/certify/kx-systems-mla-certified-contract)
+- [Testing 29 Contract Intelligence Report](https://app.termscout.com/certify/testing-29)
+- [Powerplan Contract Intelligence Report](https://app.termscout.com/certify/powerplan-certified-contract)
+- [Contentful Contract Intelligence Report](https://app.termscout.com/certify/contentful-certified-contract)
+- [Crossbeam Contract Intelligence Report](https://app.termscout.com/certify/crossbeam-certified-contract)
+- [Powerplan Certified Contract Sla Contract Intelligence Report](https://app.termscout.com/certify/powerplan-certified-contract-sla)
+- [Atlassian Certified Contract Aca Contract Intelligence Report](https://app.termscout.com/certify/atlassian-certified-contract-aca)
+- [Logicmonitor Contract Intelligence Report](https://app.termscout.com/certify/logicmonitor-certified-contract)
+- [Cultureamp Contract Intelligence Report](https://app.termscout.com/certify/cultureamp-certified-contract)
+- [Artera Contract Intelligence Report](https://app.termscout.com/certify/artera-certified-contract)
+- [Hubspot Ctos Contract Intelligence Report](https://app.termscout.com/certify/hubspot-ctos-certified-contract)
+- [Hubspot Msa Contract Intelligence Report](https://app.termscout.com/certify/hubspot-msa-certified-contract)
+- [Lenovo Hardware Contract Intelligence Report](https://app.termscout.com/certify/lenovo-hardware-certified-contract)
+- [6sense Contract Intelligence Report](https://app.termscout.com/certify/6sense-certified-contract)
+- [Procore Contract Intelligence Report](https://app.termscout.com/certify/procore-certified-contract)
+- [Onetrust Contract Intelligence Report](https://app.termscout.com/certify/onetrust-certified-contract)
+- [Docusign Contract Intelligence Report](https://app.termscout.com/certify/docusign-certified-contract)
+- [Effectual Contract Intelligence Report](https://app.termscout.com/certify/effectual-certified-contract)
+- [Contractpodai Contract Intelligence Report](https://app.termscout.com/certify/contractpodai-certified-contract)
+- [Nearmap Contract Intelligence Report](https://app.termscout.com/certify/nearmap-certified-contract)
+- [Flexera Contract Intelligence Report](https://app.termscout.com/certify/flexera-certified-contract)
+- [Reliaquest Contract Intelligence Report](https://app.termscout.com/certify/reliaquest-certified-contract)
+- [Bitsight Contract Intelligence Report](https://app.termscout.com/certify/bitsight-certified-contract)
+- [Webflow Contract Intelligence Report](https://app.termscout.com/certify/webflow-certified-contract)
+- [Outsystems Contract Intelligence Report](https://app.termscout.com/certify/outsystems-certified-contract)
+- [Coupa Contract Intelligence Report](https://app.termscout.com/certify/coupa-certified-contract)
+- [Motus Contract Intelligence Report](https://app.termscout.com/certify/motus-certified-contract)
+- [Kx Systems Oem Contract Intelligence Report](https://app.termscout.com/certify/kx-systems-oem-certified-contract)
+- [Kx Systems Mala Contract Intelligence Report](https://app.termscout.com/certify/kx-systems-mala-certified-contract)
+- [Bmc Helix Contract Intelligence Report](https://app.termscout.com/certify/bmc-helix-certified-contract)
+- [Fundapps Contract Intelligence Report](https://app.termscout.com/certify/fundapps-certified-contract)
+- [Everbridge Contract Intelligence Report](https://app.termscout.com/certify/everbridge-certified-contract)
+- [Upguard Contract Intelligence Report](https://app.termscout.com/certify/upguard-certified-contract)
+- [Hyland Contract Intelligence Report](https://app.termscout.com/certify/hyland-certified-contract)
+- [Automationanywhere Iaa Contract Intelligence Report](https://app.termscout.com/certify/automationanywhere-iaa-certified-contract)
+- [Lilt Contract Intelligence Report](https://app.termscout.com/certify/lilt-certified-contract)
+- [Powerplan Certified Contract Psa Contract Intelligence Report](https://app.termscout.com/certify/powerplan-certified-contract-psa)
+- [Thoughtspot Contract Intelligence Report](https://app.termscout.com/certify/thoughtspot-certified-contract)
+- [Calabrio Contract Intelligence Report](https://app.termscout.com/certify/calabrio-certified-contract)
+- [Termscout Contract Intelligence Report](https://app.termscout.com/certify/termscout-certified-contract)
+- [Tracksuit Contract Intelligence Report](https://app.termscout.com/certify/tracksuit-certified-contract)
+- [Cisco Contract Intelligence Report](https://app.termscout.com/certify/cisco-certified-contract)
+- [Dtn Contract Intelligence Report](https://app.termscout.com/certify/dtn-certified-contract)
+- [Moodys Contract Intelligence Report](https://app.termscout.com/certify/moodys-certified-contract)
+- [Equinix Contract Intelligence Report](https://app.termscout.com/certify/equinix-certified-contract)
+- [Imanage Contract Intelligence Report](https://app.termscout.com/certify/imanage-certified-contract)
+- [Testing Contract Intelligence Report](https://app.termscout.com/certify/testing-certified-contract)
+- [Sailpoint Contract Intelligence Report](https://app.termscout.com/certify/sailpoint-certified-contract)
+- [Pipefy Contract Intelligence Report](https://app.termscout.com/certify/pipefy-certified-contract)
+- [Velocity Ehs Contract Intelligence Report](https://app.termscout.com/certify/velocity-ehs-certified-contract)
+
+## AI Policy & AI Contract Reports
+
+Reviews of AI products, policies, and AI-related contractual terms.
+
+- [Upguard Ai Contract Intelligence Report](https://app.termscout.com/ai-certify/upguard-ai-certified-contract)
+- [Powerplan Certified Contract Ai Contract Intelligence Report](https://app.termscout.com/ai-certify/powerplan-certified-contract-ai)
+- [Hubspot Ai Contract Intelligence Report](https://app.termscout.com/ai-certify/hubspot-ai-certified-contract)
+- [Docusign Ai Contract Intelligence Report](https://app.termscout.com/ai-certify/docusign-ai-certified-contract)
+- [Webflow Ai Contract Intelligence Report](https://app.termscout.com/ai-certify/webflow-ai-certified-contract)
+- [Atlassian Ai Contract Intelligence Report](https://app.termscout.com/ai-certify/atlassian-ai-certified-contract)
+- [Hyland Ai Contract Intelligence Report](https://app.termscout.com/ai-certify/hyland-ai-certified-contract)
+
+## NDA Reports
+
+Reviews of vendor non-disclosure agreements.
+
+- [070f80b3cf5d54ef9ee8bd2a28312fa6 Contract Intelligence Report](https://app.termscout.com/nda-certify/070f80b3cf5d54ef9ee8bd2a28312fa6)
+- [Testing Nda Contract Intelligence Report](https://app.termscout.com/nda-certify/testing-nda-certified-contract)
+- [Openspace Nda Contract Intelligence Report](https://app.termscout.com/nda-certify/openspace-nda-certified-contract)
+- [Docusign Nda Contract Intelligence Report](https://app.termscout.com/nda-certify/docusign-nda-certified-contract)
+- [Outsystems Mutual Nondisclosure Agreement Stats Contract Intelligence Report](https://app.termscout.com/nda-certify/outsystems-mutual-nondisclosure-agreement-stats)
+
+## DPA Reports
+
+Reviews of data processing agreements and privacy terms.
+
+- [Docusign Dpa Contract Intelligence Report](https://app.termscout.com/dpa-certify/docusign-dpa-certified-contract)
+- [Outsystems Dpa Contract Intelligence Report](https://app.termscout.com/dpa-certify/outsystems-dpa-certified-contract)
+- [Openspace Dpa Contract Intelligence Report](https://app.termscout.com/dpa-certify/openspace-dpa-certified-contract)
+- [Moodys Dpa Contract Intelligence Report](https://app.termscout.com/dpa-certify/moodys-dpa-certified-contract)
+- [Upguard Dpa Contract Intelligence Report](https://app.termscout.com/dpa-certify/upguard-dpa-certified-contract)
+- [Webflow Dpa Contract Intelligence Report](https://app.termscout.com/dpa-certify/webflow-dpa-certified-contract)
+- [Cultureamp Dpa Contract Intelligence Report](https://app.termscout.com/dpa-certify/cultureamp-dpa-certified-contract)
+- [Atlassian Dpa Certifed Contracts Contract Intelligence Report](https://app.termscout.com/dpa-certify/atlassian-dpa-certifed-contracts)
+
+## Optional
+
+- [About TermScout](https://www.termscout.com/about)
+- [Methodology](https://learn.termscout.com/knowledge/contract-review-and-certification-methodology)
+- [Sitemap](https://app.termscout.com/sitemap.xml)

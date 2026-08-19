@@ -1,0 +1,356 @@
+generated: '2026-08-14'
+method: derived
+source: openapi/termscout-data-openapi.yml
+note: >-
+  Entity graph derived from the 21 component schemas and the $ref/id-reference
+  fields in the published termscout-data OpenAPI. TermScout publishes no object
+  reference page, so id prefixes and value domains below are recorded only where
+  the spec itself states them; everything else is marked unknown rather than
+  guessed.
+
+root_entity: Contract
+
+entities:
+- name: Contract
+  description: >-
+    A commercial agreement submitted for analysis. Created by POST /contracts,
+    which returns contract_id + document_id. Everything else in this model hangs
+    off contract_id.
+  identifier: contract_id
+  identifier_type: string
+  id_format: unknown
+  schemas:
+  - ContractUpload
+  - ContractStatus
+  - ContractList
+  - ContractOverview
+  operations:
+  - POST /contracts
+  - GET /contracts
+  - GET /contracts/{contract-id}/status
+  - GET /contracts/{contract-id}/overview
+  relationships:
+  - type: has_one
+    target: ContractOverview
+    via: contract-id
+  - type: has_one
+    target: ContractStatus
+    via: contract-id
+  - type: has_many
+    target: ExtractedField
+    via: contract-id
+  - type: has_many
+    target: Citation
+    via: contract-id
+  - type: has_one
+    target: PredictionDetail
+    via: contract-id
+  - type: has_one
+    target: PredictionFlags
+    via: contract-id
+  - type: has_many
+    target: PlaybookDetail
+    via: contract-id
+  - type: belongs_to
+    target: Template
+    via: template_id
+
+- name: Document
+  description: >-
+    The uploaded file backing a contract. Returned alongside contract_id on
+    upload and replaceable via the document-id parameter on a subsequent POST.
+  identifier: document_id
+  identifier_type: string
+  schemas:
+  - ContractUpload
+  relationships:
+  - type: belongs_to
+    target: Contract
+    via: contract_id
+  note: >-
+    Has no endpoints of its own — no GET, no delete. Only ever appears as a field
+    on the upload response and as an input parameter when replacing a document.
+
+- name: Template
+  description: >-
+    The contract type/form a contract is analysed against (the spec notes the IT
+    template is the default on GET /contract-positions). Determines which
+    questions, labels and topics apply.
+  identifier: template_id
+  identifier_type: number
+  schemas:
+  - ContractOverview
+  relationships:
+  - type: has_one
+    target: Template
+    via: parent_template_id
+    note: Self-reference — templates nest via parent_template_id.
+  exposed_as_endpoint: false
+  note: >-
+    Required input on both POST /contracts and GET /contract-positions, but
+    there is NO endpoint to list or look up templates. A caller must obtain
+    valid template ids out of band. This is the single largest discoverability
+    gap in the model.
+
+- name: ContractOverview
+  description: >-
+    Scored summary of a contract — parties, rating, percentile against market,
+    category, and the TrustMark badge/logo URLs.
+  identifier: null
+  schemas:
+  - ContractOverview
+  key_fields:
+  - party_a
+  - party_b
+  - overall_score
+  - max_score
+  - rating
+  - raw_rating
+  - rating_display
+  - rating_percentile
+  - overall_clarity
+  - contract_position
+  - is_public
+  - legal_entity
+  - badge_url
+  - logo_url
+  - primary_agreement_url
+  - last_updated
+  relationships:
+  - type: belongs_to
+    target: Contract
+    via: contract-id
+  - type: belongs_to
+    target: Template
+    via: template_id
+  - type: belongs_to
+    target: ContractPosition
+    via: contract_position_id
+  - type: belongs_to
+    target: ProductSuite
+    via: product_suite_id
+  - type: belongs_to
+    target: Category
+    via: primary_category_id
+
+- name: ExtractedField
+  description: Key data point pulled out of a contract, with its citation and source language.
+  identifier: extracted_field_id
+  identifier_type: number
+  schemas:
+  - ExtractedField
+  - ExtractedFields
+  key_fields:
+  - value
+  - extracted_field_name
+  - measurement_name
+  - type_name
+  - source_language
+  - citation
+  relationships:
+  - type: belongs_to
+    target: Contract
+    via: contract_id
+  - type: belongs_to
+    target: Measurement
+    via: extracted_field_measurement_id
+  - type: belongs_to
+    target: DataType
+    via: extracted_field_data_type_id
+  - type: belongs_to
+    target: Source
+    via: source_id
+
+- name: Citation
+  description: Source language backing an answer, filterable by question, label or topic.
+  schemas:
+  - Citation
+  - Citations
+  key_fields:
+  - citations
+  - source_langauge
+  relationships:
+  - type: belongs_to
+    target: Contract
+    via: contract-id
+  - type: belongs_to
+    target: Question
+    via: question-id
+  - type: belongs_to
+    target: Label
+    via: label-id
+  - type: belongs_to
+    target: Topic
+    via: topic-id
+  note: source_langauge is misspelled in the published spec.
+
+- name: PredictionDetail
+  description: Predicted labels for a contract, grouped by topic.
+  schemas:
+  - PredictionDetail
+  - PredictionDetailTopic
+  - PredictionDetailLabel
+  relationships:
+  - type: belongs_to
+    target: Contract
+    via: contract_id
+  - type: has_many
+    target: Topic
+    via: details[].topic_id
+  - type: has_many
+    target: Label
+    via: details[].predictions[].label_id
+
+- name: PredictionFlags
+  description: Predicted red flags for a contract, grouped into named buckets with counts.
+  schemas:
+  - PredictionFlags
+  - PredictionFlagsDetail
+  - PredictionFlag
+  relationships:
+  - type: belongs_to
+    target: Contract
+    via: contract_id
+  - type: has_many
+    target: Label
+    via: details[].flags[].label_id
+
+- name: PredictionSummary
+  description: Narrative summary of predictions for one topic on one contract.
+  schemas:
+  - PredictionSummary
+  key_fields:
+  - summary
+  relationships:
+  - type: belongs_to
+    target: Contract
+    via: contract_id
+  - type: belongs_to
+    target: Topic
+    via: topic_id
+
+- name: PlaybookDetail
+  description: >-
+    Playbook evaluation of a contract — per-question pass/fail against required,
+    acceptable and unacceptable label sets, with tier and rank.
+  schemas:
+  - PlaybookDetail
+  - PlaybookPassFailDetail
+  key_fields:
+  - tier
+  - issue_number
+  - display_name
+  - answer_display
+  - filter_passed
+  - rank
+  - citation
+  relationships:
+  - type: belongs_to
+    target: Contract
+    via: contract-id
+  - type: belongs_to
+    target: Question
+    via: question_id
+  - type: has_many
+    target: Label
+    via: selected_label_ids / unselected_label_ids / required_label_ids / acceptable_label_ids / unacceptable_label_ids
+
+- name: ContractPosition
+  description: >-
+    The party that drafted the contract form. The spec states "Use '1' for vendor
+    form" on the contract-position-id parameter. Doubles as the grouping
+    dimension for the market-data endpoint.
+  identifier: id
+  identifier_type: number
+  schemas:
+  - ContractPosition
+  - ContractPositions
+  key_fields:
+  - name
+  - quantity
+  known_values:
+  - id: 1
+    meaning: vendor form
+    source: POST /contracts contract-position-id parameter description
+  operations:
+  - GET /contract-positions
+
+- name: Label
+  description: >-
+    An atomic contract characteristic that the model predicts true/false with a
+    confidence score. The unit of both prediction and market benchmarking.
+  identifier: label_id
+  identifier_type: number
+  exposed_as_endpoint: false
+  key_fields:
+  - label_display
+  - confidence
+  - selected
+  - defined_term
+  note: >-
+    Referenced by five different schemas and three query parameters, but there is
+    NO endpoint to enumerate labels. Like templates, label ids must be obtained
+    out of band.
+
+- name: Topic
+  description: Grouping of labels; the unit of prediction summaries.
+  identifier: topic_id
+  identifier_type: number
+  exposed_as_endpoint: false
+  key_fields:
+  - topic_name
+
+- name: Question
+  description: A substantive question asked of the contract; backs playbook detail and citations.
+  identifier: question_id
+  identifier_type: number
+  exposed_as_endpoint: false
+
+referenced_but_undefined:
+  note: >-
+    These are referenced by id fields on returned objects but have no schema and
+    no endpoint anywhere in the spec. An integrator cannot resolve them.
+  entities:
+  - name: ProductSuite
+    via: product_suite_id
+    partial: product_suite_name and product_suite_url are returned inline on ContractOverview
+  - name: Category
+    via: primary_category_id
+    partial: category and category_url are returned inline on ContractOverview
+  - name: Measurement
+    via: extracted_field_measurement_id
+  - name: DataType
+    via: extracted_field_data_type_id
+  - name: Source
+    via: source_id
+  - name: Filter
+    via: filter-id (GET /contracts/{contract-id}/playbook-detail)
+  - name: FilterQuestion
+    via: filter_question_id
+
+unused_schemas:
+- name: Empty
+  note: Declared with no properties and referenced by no operation.
+- name: testUpload
+  note: >-
+    Identical in shape to ContractUpload (contract_id + document_id) and
+    referenced by no operation. A leftover test artifact left in the published
+    definition.
+
+id_prefixes:
+  documented: false
+  note: >-
+    No id prefix scheme is published. contract_id and document_id are typed as
+    plain strings; all other identifiers are numbers.
+
+lookup_gaps:
+  note: >-
+    The model is read-heavy and reference-poor. Five of the entities an
+    integrator must supply ids for (Template, Label, Topic, Question, Filter)
+    have no list endpoint, so the API cannot be driven from the API alone.
+  missing_list_endpoints:
+  - Template
+  - Label
+  - Topic
+  - Question
+  - Filter

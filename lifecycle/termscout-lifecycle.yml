@@ -1,0 +1,89 @@
+generated: '2026-08-14'
+method: searched
+source: https://api.termscout.com/docs
+note: >-
+  Searched termscout.com, app.termscout.com, learn.termscout.com (help centre,
+  including its full sitemap) and blog.termscout.com for a versioning policy,
+  deprecation policy, SLA, changelog or status page. None exist. The findings
+  below are therefore mostly recorded absences, each with the probe that
+  established it.
+
+versioning:
+  scheme: none
+  current: null
+  in_path: false
+  in_header: false
+  docs: null
+  note: >-
+    No version segment appears in any of the 10 paths and no version header is
+    documented. info.version in the published spec is "2022-07-19T16:30:18Z" —
+    an AWS API Gateway stage export timestamp, not a consumer-facing version.
+    That stamp also means the definition currently served has not been re-exported
+    since July 2022, which is the closest thing to a freshness signal available.
+
+deprecation:
+  policy_url: null
+  policy_published: false
+  sunset_header: false
+  deprecation_header: false
+  rfc8594: false
+  note: >-
+    No deprecation policy, no Sunset/Deprecation header support documented, and
+    no advance-notice commitment. No operation in the spec carries
+    deprecated: true.
+
+deprecated_operations: []
+
+sla:
+  url: null
+  published: false
+  uptime_target: null
+  note: No SLA or uptime commitment is published on the pricing page or elsewhere on the public site.
+
+status_page:
+  url: null
+  published: false
+  method: probed
+  note: >-
+    No status page exists. status.termscout.com does not resolve (DNS failure).
+    termscout.statuspage.io resolves but 302s to Atlassian's Statuspage product
+    marketing page rather than a TermScout-hosted status page, so it is a
+    false positive, not a status surface. No StatusPage pointer is wired in
+    apis.yml as a result.
+  evidence:
+  - url: https://status.termscout.com/
+    status: 000
+    detail: DNS resolution failure
+  - url: https://termscout.statuspage.io/
+    status: 200
+    detail: >-
+      Redirects to atlassian.com/software/statuspage; page title is "Real-Time
+      Incident Communication with Statuspage | Atlassian". Not a TermScout status page.
+  - url: https://termscout.statuspage.io/api/v2/status.json
+    status: 200
+    detail: Returns the Atlassian marketing HTML page, not Statuspage API JSON.
+
+changelog:
+  url: null
+  published: false
+  note: >-
+    No dated API changelog or release-notes page was found. blog.termscout.com
+    and resources.termscout.com carry marketing and contract-insight content, not
+    API release notes. No ChangeLog pointer is wired.
+
+support:
+  help_center: https://learn.termscout.com/knowledge
+  security_contact: infosec@termscout.com
+  sales_contact: https://www.termscout.com/contact-sales
+
+maturity_signals:
+  spec_last_exported: '2022-07-19'
+  spec_source: info.version stamp in the published OpenAPI
+  operation_ids_present: false
+  tags_present: false
+  error_responses_declared: false
+  note: >-
+    Recorded as observed facts about the published contract, not as a judgement
+    of the running service. The API is demonstrably live (it answers on the
+    host and serves its own definition anonymously), but the definition itself
+    carries no operationIds, no tags, and no non-200 responses.

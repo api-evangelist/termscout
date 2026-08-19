@@ -1,0 +1,78 @@
+generated: '2026-08-14'
+method: derived
+source: openapi/termscout-data-openapi.yml
+format: non-standard
+rfc9457: false
+problem_count: 0
+note: >-
+  DERIVED FROM AN ABSENCE, and that absence is the finding. All 11 operations in
+  the published termscout-data OpenAPI declare exactly one response each — 200 —
+  with no 4xx and no 5xx anywhere in the document. There is no error reference on
+  termscout.com, app.termscout.com or the learn.termscout.com help centre either,
+  so there is nothing to search-upgrade this with. A consumer integrating against
+  this contract has no published way to know what a failure looks like, which
+  status codes are possible, or how to distinguish a retryable error from a
+  permanent one.
+problems: []
+
+observed_envelope:
+  method: probed
+  fetched: '2026-08-14'
+  shape: '{"message": "<text>"}'
+  content_type: application/json
+  note: >-
+    Not a documented contract. This is the AWS API Gateway default envelope,
+    captured live from anonymous requests to the API host. Recorded so an
+    integrator has something real to parse against, clearly marked as observed
+    rather than published.
+  samples:
+  - url: https://api.termscout.com/openapi.json
+    http_status: 403
+    body: '{"message":"Missing Authentication Token"}'
+    amzn_errortype: MissingAuthenticationTokenException
+    meaning: >-
+      Route not matched, or credential headers absent. AWS returns this for both
+      an unknown path and a missing Authorization header, so a 403 here does not
+      reliably distinguish "wrong URL" from "not authenticated".
+  - url: https://api.termscout.com/
+    http_status: 403
+    body: '{"message":"Missing Authentication Token"}'
+    amzn_errortype: MissingAuthenticationTokenException
+
+expected_platform_errors:
+  method: derived
+  confidence: low
+  note: >-
+    NOT PUBLISHED BY TERMSCOUT. These are the standard AWS API Gateway failure
+    modes implied by the securitySchemes in the spec (a usage-plan x-api-key plus
+    a custom token authorizer with authorizerResultTtlInSeconds 0). Listed to
+    help an integrator plan error handling, explicitly flagged as inference. Do
+    not present these as TermScout's documented error catalog.
+  candidates:
+  - status: 403
+    amzn_errortype: MissingAuthenticationTokenException
+    cause: Missing Authorization header or unmatched route
+    confirmed: true
+  - status: 403
+    amzn_errortype: InvalidSignatureException / AccessDeniedException
+    cause: Authorizer rejected the supplied Authorization credential
+    confirmed: false
+  - status: 403
+    amzn_errortype: ForbiddenException
+    cause: Missing or invalid x-api-key
+    confirmed: false
+  - status: 429
+    amzn_errortype: LimitExceededException / ThrottlingException
+    cause: Usage-plan rate or quota exceeded
+    confirmed: false
+  - status: 502
+    amzn_errortype: BadGatewayException
+    cause: Backend integration failure
+    confirmed: false
+
+gaps_to_raise_with_provider:
+- No 4xx/5xx responses declared on any of the 11 operations.
+- No error code registry or error reference page published.
+- ContractStatus.status is an untyped string with no enum, so the terminal
+  states of the submit-then-poll workflow are undocumented.
+- 403 is overloaded across "unknown route" and "not authenticated".

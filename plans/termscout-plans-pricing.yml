@@ -1,0 +1,118 @@
+generated: '2026-08-14'
+method: searched
+source: https://www.termscout.com/termscout-pricing
+docs: https://www.termscout.com/termscout-pricing
+plan_count: 3
+currency: USD
+billing_period: month
+billing_note: >-
+  Verbatim from the pricing page: "Pricing displayed is based on annual billing
+  with auto-renewal." The monthly figures below are therefore the annual-commit
+  monthly rate, not a month-to-month price. No month-to-month price is published.
+
+scope_note: >-
+  IMPORTANT — these are PRODUCT plans, not API plans. The tiers below price
+  TrustMark certification and Certify seats. TermScout publishes no pricing,
+  metering, quota or rate tier for the termscout-data API at
+  api.termscout.com, and no plan below mentions API access. API access is
+  arranged through sales (https://www.termscout.com/contact-sales). Recorded
+  here because they are the only plans the provider publishes.
+
+plans:
+- name: Basic
+  price: 900
+  currency: USD
+  period: month
+  billing: annual-commit
+  included:
+  - TrustMark certification for customer-facing or private agreements, based on
+    contract analysis and benchmarking through Certify
+  - Public or private TrustMark summary with market-backed signals
+  - Standard customer support
+  quota: null
+  overage: null
+  api_access: not-stated
+- name: Pro
+  price: 1300
+  currency: USD
+  period: month
+  billing: annual-commit
+  most_popular: true
+  inherits: Basic
+  included:
+  - Everything in Basic
+  - Detailed contract scorecard with clause-level signals and market benchmarking
+  - Guidance on how the contract compares to market and where to adjust
+  quota: null
+  overage: >-
+    Additional Scorecards beyond the plan allotment can be purchased; price not
+    published ("Contact us for more information").
+  api_access: not-stated
+- name: Premium
+  price: 1700
+  currency: USD
+  period: month
+  billing: annual-commit
+  inherits: Pro
+  included:
+  - Everything in Pro
+  - Expanded annual analysis, including 2 detailed scorecards and 3 competitive
+    benchmarks a year
+  - Multi-competitor intelligence showing where terms lead, lag and can be strengthened
+  - Priority, personalized support throughout the certification journey
+  quota:
+    scorecards_per_year: 2
+    competitive_benchmarks_per_year: 3
+  overage: Additional Scorecards purchasable; price not published.
+  api_access: not-stated
+
+add_ons:
+- name: TrustMark AI (Advanced Contract Analysis)
+  price: 250
+  currency: USD
+  period: month
+  requires: Pro plan or higher
+- name: Additional Certify Seats
+  price: 450
+  currency: USD
+  period: month
+  unit: per seat
+  minimum: 5 seats
+- name: Custom FAQs
+  price: 250
+  currency: USD
+  period: month
+
+pricing_model:
+  certify:
+    model: seat-based
+    self_serve: false
+    note: >-
+      Per the help centre: "Certify is accessed through a guided demo and has
+      seat-based pricing."
+    source: https://learn.termscout.com/knowledge/how-does-termscout-pricing-work
+  trustmark:
+    model: per-contract
+    note: 'Per the help centre: "TrustMark is priced per contract."'
+    source: https://learn.termscout.com/knowledge/how-does-termscout-pricing-work
+
+commercial_terms:
+  tier_changes: >-
+    Upgrades take effect immediately; downgrades take effect at the next billing
+    cycle.
+  certification_type: >-
+    Ongoing, not one-time — TrustMark is maintained as the contract evolves
+    against current market benchmarks.
+  bundling: >-
+    Bundled pricing for multiple contracts is available but not published; quoted
+    per-deal via demo.
+  free_trial: false
+  self_serve_signup: false
+
+evidence:
+- url: https://www.termscout.com/termscout-pricing
+  status: 200
+  fetched: '2026-08-14'
+- url: https://learn.termscout.com/knowledge/how-does-termscout-pricing-work
+  status: 200
+  fetched: '2026-08-14'

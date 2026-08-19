@@ -1,0 +1,159 @@
+generated: '2026-08-14'
+method: derived
+source: openapi/termscout-data-openapi.yml
+note: >-
+  Cross-cutting standards conformance for the termscout-data API, derived from
+  the published OpenAPI 3.0.1 definition plus live probes. Compliance-program
+  claims (SOC 2 etc.) are a separate thing and live in
+  security/termscout-trust-center.yml; they are cross-referenced at the bottom
+  but deliberately not merged into the standards list.
+
+standards:
+- id: openapi-3.0
+  conforms: true
+  evidence: >-
+    Published definition declares openapi 3.0.1 with paths, components.schemas
+    and components.securitySchemes; parses cleanly. Served anonymously at
+    https://api.termscout.com/docs.
+- id: openapi-3.1
+  conforms: false
+  evidence: Document is 3.0.1, not 3.1.x.
+- id: rest
+  conforms: partial
+  evidence: >-
+    Resource-oriented paths and correct verb use (GET for reads, POST for
+    create/update), but every input including the contract upload travels as a
+    query parameter and POST /contracts declares no requestBody.
+- id: rfc9457-problem-details
+  conforms: false
+  evidence: >-
+    No application/problem+json media type anywhere; no 4xx/5xx responses are
+    declared at all. Observed live error envelope is the AWS API Gateway default
+    {"message": "..."}.
+- id: oauth2
+  conforms: false
+  evidence: >-
+    No oauth2 securityScheme, no authorization or token endpoint published.
+    info.description claims "Oath and Basic auth are supported" but nothing in
+    the contract backs it. See authentication/termscout-authentication.yml.
+- id: oidc
+  conforms: false
+  evidence: No openIdConnect securityScheme and no OIDC discovery document on the API host.
+- id: api-key-auth
+  conforms: true
+  evidence: >-
+    apiKey securityScheme "api_key" in header as x-api-key, applied to all 11
+    operations.
+- id: http-basic
+  conforms: false
+  evidence: >-
+    Claimed in info.description prose but no http/basic securityScheme is
+    declared.
+- id: mutual-tls
+  conforms: false
+  evidence: No mutualTLS securityScheme.
+- id: rfc8594-sunset
+  conforms: false
+  evidence: No Sunset or Deprecation header support documented.
+- id: idempotency
+  conforms: false
+  evidence: >-
+    No Idempotency-Key header or replay semantics. Only a client-managed upsert
+    via the optional contract-id parameter on POST /contracts.
+- id: pagination
+  conforms: false
+  evidence: >-
+    Collection endpoints (GET /contracts, /contract-positions, /citations,
+    /extracted-fields) return unbounded bare arrays with no cursor, limit,
+    offset or total.
+- id: rate-limit-headers
+  conforms: false
+  evidence: >-
+    Neither RFC 9239-style RateLimit-* nor X-RateLimit-* headers are documented,
+    and none were observed on anonymous responses.
+- id: json-api
+  conforms: false
+  evidence: No JSON:API envelope, type/attributes structure or media type.
+- id: odata
+  conforms: false
+  evidence: No OData query conventions.
+- id: hateoas
+  conforms: false
+  evidence: >-
+    No link relations between resources; ids are returned as bare scalars with
+    no hrefs. Several referenced entities have no endpoint at all.
+- id: webhooks
+  conforms: false
+  evidence: >-
+    No webhooks object, no callbacks, no callback-URL parameter. The
+    asynchronous submit-then-poll workflow has no push alternative.
+- id: asyncapi
+  conforms: false
+  evidence: No event or streaming surface published.
+- id: tls-1.2-plus
+  conforms: true
+  method: probed
+  evidence: >-
+    api.termscout.com negotiates TLSv1.3; certificate valid to Feb 24 2027.
+    See security/termscout-domain-security.yml.
+- id: hsts
+  conforms: false
+  method: probed
+  evidence: >-
+    No Strict-Transport-Security header on api.termscout.com (the www host does
+    send one with max-age 31536000).
+- id: llms-txt
+  conforms: true
+  method: probed
+  evidence: >-
+    https://app.termscout.com/llms.txt returns 200 text/plain with a valid
+    llms.txt structure (H1, blockquote summary, sectioned link lists, Optional
+    section). Saved verbatim to llms/termscout-llms.txt.
+- id: a2a-agent-card
+  conforms: false
+  method: probed
+  evidence: >-
+    /.well-known/agent-card.json and /.well-known/agent.json probed on all seven
+    TermScout hosts on 2026-08-14. No card. app.termscout.com answers 200 with an
+    identical 6217-byte SPA shell for every /.well-known/* path — rejected as a
+    catch-all false positive, not a card.
+- id: mcp
+  conforms: false
+  method: probed
+  evidence: >-
+    No TermScout MCP server. api.termscout.com/mcp returns the API Gateway 403.
+    security.termscout.com serves OAuth/OIDC discovery documents, but they point
+    at issuer https://app.safebase.io/api/mcp — the SafeBase trust-center
+    vendor's MCP, not TermScout's. See well-known/termscout-well-known.yml.
+
+spec_quality:
+  note: >-
+    Not a standards claim; recorded here because contract_quality reads spec
+    content and these are the concrete gaps a follow-up with the provider would
+    raise.
+  operations: 11
+  paths: 10
+  schemas: 21
+  summaries_present: 11
+  descriptions_present: 3
+  operation_ids_present: 0
+  tags_declared: 0
+  operations_tagged: 0
+  success_responses_declared: 11
+  error_responses_declared: 0
+  examples_in_spec: 0
+  security_schemes_defined: 2
+  security_schemes_applied: 2
+  servers_declared: 1
+  unused_schemas: 2
+
+compliance_programs:
+  note: >-
+    TermScout publishes a real, staffed trust centre with named certifications.
+    Captured separately — this file covers technical standards conformance only.
+  detail: security/termscout-trust-center.yml
+  url: https://security.termscout.com/
+  certifications:
+  - SOC 2
+  - GDPR
+  - CCPA
