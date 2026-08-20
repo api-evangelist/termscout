@@ -51,6 +51,18 @@ tags:
 - Procurement
 - Legal Operations
 - Sales Enablement
+- Artificial Intelligence
+- Contract Data
+- Document Analysis
+tags_raw:
+- Company
+- Legal Tech
+- Contract Intelligence
+- Contract Certification
+- Contract Analysis
+- Procurement
+- Legal Operations
+- Sales Enablement
 - AI
 - Contract Data
 - Document Analysis
@@ -71,6 +83,15 @@ apis:
   humanURL: https://api.termscout.com/docs
   baseURL: https://api.termscout.com
   tags:
+  - Contract Intelligence
+  - Contract Analysis
+  - Legal Tech
+  - Document Analysis
+  - Benchmarking
+  - Market Data
+  - Legal Operations
+  - Procurement
+  tags_raw:
   - contract-intelligence
   - contract-analysis
   - legal-tech
