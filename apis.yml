@@ -67,42 +67,16 @@ tags_raw:
 - Contract Data
 - Document Analysis
 apis:
-- name: TermScout Data API
-  description: >-
-    The termscout-data API turns a commercial agreement into structured contract
-    intelligence. Callers upload a contract (or point at a hosted public
-    contract URL), poll processing status, then read back extracted fields,
-    citations with source language, predicted labels and confidence scores,
-    predicted red flags, playbook pass/fail detail, a topic-level prediction
-    summary, and a scored contract overview. A separate market-data endpoint
-    returns frequency counts across contract positions so a single contract can
-    be benchmarked against TermScout's corpus. Query parameters are kebab-case
-    and response fields are snake_case. Every request requires both an
-    x-api-key header and an Authorization credential validated by a custom
-    authorizer.
+- aid: termscout:termscout-contract-positions-api
+  name: TermScout Contract Positions API
+  description: The Contract Positions API from TermScout — 1 operation(s) for contract positions.
   humanURL: https://api.termscout.com/docs
   baseURL: https://api.termscout.com
   tags:
-  - Contract Intelligence
-  - Contract Analysis
-  - Legal Tech
-  - Document Analysis
-  - Benchmarking
-  - Market Data
-  - Legal Operations
-  - Procurement
-  tags_raw:
-  - contract-intelligence
-  - contract-analysis
-  - legal-tech
-  - document-analysis
-  - benchmarking
-  - market-data
-  - legal-operations
-  - procurement
+  - Contract Positions
   properties:
   - type: OpenAPI
-    url: openapi/termscout-data-openapi.yml
+    url: openapi/termscout-contract-positions-api-openapi.yml
   - type: Authentication
     url: authentication/termscout-authentication.yml
   - type: Conventions
@@ -113,20 +87,44 @@ apis:
     url: errors/termscout-problem-types.yml
   - type: Conformance
     url: conformance/termscout-conformance.yml
-  - type: Overlay
-    url: overlays/termscout-data-overlay.yaml
   - type: RateLimits
     url: rate-limits/termscout-rate-limits.yml
   - type: Lifecycle
     url: lifecycle/termscout-lifecycle.yml
-  - type: AgentSkill
-    url: skills/_index.yml
+- aid: termscout:termscout-contracts-api
+  name: TermScout Contracts API
+  description: The Contracts API from TermScout — 9 operation(s) for contracts.
+  humanURL: https://api.termscout.com/docs
+  baseURL: https://api.termscout.com
+  tags:
+  - Contracts
+  properties:
+  - type: OpenAPI
+    url: openapi/termscout-contracts-api-openapi.yml
+  - type: Authentication
+    url: authentication/termscout-authentication.yml
+  - type: Conventions
+    url: conventions/termscout-conventions.yml
+  - type: DataModel
+    url: data-model/termscout-data-model.yml
+  - type: ErrorCatalog
+    url: errors/termscout-problem-types.yml
+  - type: Conformance
+    url: conformance/termscout-conformance.yml
+  - type: RateLimits
+    url: rate-limits/termscout-rate-limits.yml
+  - type: Lifecycle
+    url: lifecycle/termscout-lifecycle.yml
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: Overlay
+  url: overlays/termscout-data-overlay.yaml
+- type: AgentSkill
+  url: skills/_index.yml
 - type: Website
   url: https://termscout.com/
 - type: Blog
