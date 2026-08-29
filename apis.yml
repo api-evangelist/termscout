@@ -133,6 +133,9 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: CapabilityMap
+  url: capabilities/termscout-capability-edges.yml
+  name: TermScout Business Capability Map
 - type: Overlay
   url: overlays/termscout-data-overlay.yaml
 - type: AgentSkill
