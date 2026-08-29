@@ -18,6 +18,18 @@ description: >-
   end-user products are delivered through the app.termscout.com web
   application, which also publishes an llms.txt index of public TrustMark
   contract reports.
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: true
+  label: Hosted service · you call their endpoint
+  confidence: high
+  source:
+  - openapi
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 accessModel:
   pricing: paid
   onboarding: approval
