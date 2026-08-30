@@ -1,0 +1,1594 @@
+openapi: 3.2.0
+info:
+  title: termscout-data Contract Positions API
+  description: "TermScout API \n\nAll requests require both authentication and an API key.\n\nOath and Basic auth are supported.\n\nAll query params are `kebob-case`, all responses are `snake_case`"
+  version: '2022-07-19T16:30:18Z'
+servers:
+- url: https://api.termscout.com
+tags:
+- name: Contract Positions
+paths:
+  /contract-positions:
+    get:
+      summary: Market data across contract positions
+      description: "Frequency counts based on TermScout's market data across contract positons. Without any query parameters, will return total contract counts for each contract position, defaulting to the IT template.\n\n  To filter on a specific template or label, include a `template-id`, `label-id` and `selected`. Set `selected` to `1` for frequency counts where the given label is true. Set `selected` to `0` for frequency counts where the label is not true.\n\n  To construct frequency percentages for a given label, first call the endpoint with no `label-id` to get the denominator. Then call the endpoint with `label-id` and `selected` included to get the numerator. Then you can divide the numerator by the denominator for each contract position returned."
+      parameters:
+      - name: template-id
+        in: query
+        description: ID of template to fetch counts for
+        required: true
+        schema:
+          type: string
+      - name: label-id
+        in: query
+        description: ID of label to fetch counts for
+        schema:
+          type: string
+      - name: selected
+        in: query
+        description: Set to `1` for counts where label is true, `0` for counts where label is false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: 200 response
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContractPositions'
+      security:
+      - lambda-api-authorizer: []
+      - api_key: []
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:747513234329:function:contract-positions:${stageVariables.lambdaAlias}/invocations
+        httpMethod: POST
+        responses:
+          default:
+            statusCode: '200'
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: '''*'''
+        passthroughBehavior: when_no_match
+        responseTransferMode: BUFFERED
+        contentHandling: CONVERT_TO_TEXT
+        type: aws_proxy
+      tags:
+      - Contract Positions
+components:
+  schemas:
+    ContractPosition:
+      type: object
+      properties:
+        id:
+          type: number
+          description: ID of the given contract position
+          format: integer
+        name:
+          type: string
+          description: Name of the given contract position
+        quantity:
+          type: string
+          description: Number of contracts that meet that meet the criteria defined by the input query parameters
+      description: Frequency count for the given contract position
+    ContractPositions:
+      type: array
+      description: Frequency counts for all relevant contract positions
+      items:
+        $ref: '#/components/schemas/ContractPosition'
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: x-api-key
+      in: header
+    lambda-api-authorizer:
+      type: apiKey
+      name: Authorization
+      in: header
+      x-amazon-apigateway-authtype: custom
+      x-amazon-apigateway-authorizer:
+        authorizerUri: arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:747513234329:function:api-authorizer/invocations
+        authorizerResultTtlInSeconds: 0
+        type: token
+x-amazon-apigateway-documentation:
+  version: '22'
+  createdDate: '2023-03-27T17:24:54Z'
+  documentationParts:
+  - location:
+      type: API
+    properties:
+      info:
+        description: "TermScout API \n\nAll requests require both authentication and an API key.\n\nOath and Basic auth are supported.\n\nAll query params are `kebob-case`, all responses are `snake_case`"
+  - location:
+      type: METHOD
+      path: /certify/{certified-name}
+      method: GET
+    properties:
+      summary: Certified contracts
+  - location:
+      type: METHOD
+      path: /certify
+      method: GET
+    properties:
+      summary: List of certified contracts
+  - location:
+      type: METHOD
+      path: /contract-positions
+      method: GET
+    properties:
+      summary: Market data across contract positions
+      description: "Frequency counts based on TermScout's market data across contract positons. Without any query parameters, will return total contract counts for each contract position, defaulting to the IT template.\n\n  To filter on a specific template or label, include a `template-id`, `label-id` and `selected`. Set `selected` to `1` for frequency counts where the given label is true. Set `selected` to `0` for frequency counts where the label is not true.\n\n  To construct frequency percentages for a given label, first call the endpoint with no `label-id` to get the denominator. Then call the endpoint with `label-id` and `selected` included to get the numerator. Then you can divide the numerator by the denominator for each contract position returned."
+  - location:
+      type: METHOD
+      path: /contracts/{contract-id}/citations
+      method: GET
+    properties:
+      summary: Citations and source language
+      description: "Citations and source language on a given contract. Without any query parameters, will return all citations for a given contract. \n\n To filter on a specific question or label, include *one* of either a `label-id` a `question-id`, or a `topic-id`"
+  - location:
+      type: METHOD
+      path: /contracts/{contract-id}/extracted-fields
+      method: GET
+    properties:
+      summary: Key data points for a contract
+      description: Key data points for a contract
+  - location:
+      type: METHOD
+      path: /contracts/{contract-id}/overview
+      method: GET
+    properties:
+      summary: General overview and metadata for a given contract
+  - location:
+      type: METHOD
+      path: /contracts/{contract-id}/playbook-detail
+      method: GET
+    properties:
+      description: Fetch details of playbook results applied to the given contract
+      summary: Playbook results
+  - location:
+      type: METHOD
+      path: /contracts/{contract-id}/playbooks-list
+      method: GET
+    properties:
+      description: List all valid playbooks for the given contract
+  - location:
+      type: METHOD
+      path: /contracts/{contract-id}/prediction-detail
+      method: GET
+    properties:
+      summary: Predicted labels
+      description: Fetch predicted labels and associated details for the given contract by topic
+  - location:
+      type: METHOD
+      path: /contracts/{contract-id}/prediction-flags
+      method: GET
+    properties:
+      summary: Predicted red flags
+      description: Fetch details of playbook results applied to the given contract
+  - location:
+      type: METHOD
+      path: /contracts/{contract-id}/prediction-summary
+      method: GET
+    properties:
+      summary: Prediction summary
+      description: Fetch topic level summary of predicted labels
+  - location:
+      type: METHOD
+      path: /contracts/{contract-id}/status
+      method: GET
+    properties:
+      summary: Status of a contract
+      description: 'Status of a contract in our review pipeline. Will either be: `In Progress` or `Completed`'
+  - location:
+      type: METHOD
+      path: /contracts
+      method: GET
+    properties:
+      summary: Customer contracts
+      description: List of contracts available to the authorized customer
+  - location:
+      type: METHOD
+      path: /contracts
+      method: POST
+    properties:
+      summary: Upload a contract
+      description: "Endpoint to upload a contract. Currently supports .pdf, .docx and .txt. \n\nA base64 encoded byte string for the document data is required as the POST body.\n\nTo upload multiple documents, POST with the primary document, retrieve the returned `contract-id` then repeat the same step for each new document, including the `contract_id` in the subsequent requests to associate multiple documents with the same contract.\n\nIf submitted without a `contract-id`, will create a new contract and return a new `contract-id` and a `document-id`. \n\nIf submitted with a `document-id`, will replace that document with the new document"
+  - location:
+      type: METHOD
+      path: /product-suites/{id}/preview
+      method: GET
+    properties:
+      description: Method to retrieve preview data for a given product suite id
+  - location:
+      type: METHOD
+      path: /product-suites/{id}/topics
+      method: GET
+    properties:
+      description: Method to list all topics and their summary data for a given ps_id
+  - location:
+      type: METHOD
+      path: /product-suites
+      method: GET
+    properties:
+      description: Method to list all currently active product suite names and ids
+  - location:
+      type: MODEL
+      name: Citation.citations
+    properties:
+      description: Citation
+  - location:
+      type: MODEL
+      name: Citation.source_langauge
+    properties:
+      description: Source language of the citation
+  - location:
+      type: MODEL
+      name: Citation
+    properties:
+      title: Citation
+  - location:
+      type: MODEL
+      name: ContractList.items.contract_id
+    properties:
+      description: ID of the ontract
+  - location:
+      type: MODEL
+      name: ContractList.items.primary_agreement
+    properties:
+      description: Primary agreement name of the contract
+  - location:
+      type: MODEL
+      name: ContractList.items.status
+    properties:
+      description: Status of the contract
+  - location:
+      type: MODEL
+      name: ContractList.items.template_id
+    properties:
+      description: Template id of the contract
+  - location:
+      type: MODEL
+      name: ContractList
+    properties:
+      description: Item for ContractList, contains contract status and basic information
+  - location:
+      type: MODEL
+      name: ContractOverview.badge_url
+    properties:
+      description: Location of badge
+  - location:
+      type: MODEL
+      name: ContractOverview.category
+    properties:
+      description: Display friendly category name
+  - location:
+      type: MODEL
+      name: ContractOverview.category_url
+    properties:
+      description: DEPRECATED
+  - location:
+      type: MODEL
+      name: ContractOverview.contract_position
+    properties:
+      description: Position of contract
+  - location:
+      type: MODEL
+      name: ContractOverview.contract_position_id
+    properties:
+      description: Contract position id of contract
+  - location:
+      type: MODEL
+      name: ContractOverview.is_public
+    properties:
+      description: Visibility of contract. `1` if public, `0` if private
+  - location:
+      type: MODEL
+      name: ContractOverview.last_updated
+    properties:
+      description: Date and time contract was last reviewed
+  - location:
+      type: MODEL
+      name: ContractOverview.legal_entity
+    properties:
+      description: Name of legal entity the contract belongs to
+  - location:
+      type: MODEL
+      name: ContractOverview.logo_url
+    properties:
+      description: Location of image for contract or product suite
+  - location:
+      type: MODEL
+      name: ContractOverview.max_score
+    properties:
+      description: Max score
+  - location:
+      type: MODEL
+      name: ContractOverview.notes_to_customer
+    properties:
+      description: Notes to customer
+  - location:
+      type: MODEL
+      name: ContractOverview.overall_clarity
+    properties:
+      description: Clarity of given contract
+  - location:
+      type: MODEL
+      name: ContractOverview.overall_score
+    properties:
+      description: Numeric representation of the overall score
+  - location:
+      type: MODEL
+      name: ContractOverview.parent_template_id
+    properties:
+      description: ID of the parent template
+  - location:
+      type: MODEL
+      name: ContractOverview.party_a
+    properties:
+      description: One of the parties in the contract
+  - location:
+      type: MODEL
+      name: ContractOverview.party_b
+    properties:
+      description: The other party in the contract
+  - location:
+      type: MODEL
+      name: ContractOverview.primary_agreement
+    properties:
+      description: Primary agreement name for the contract
+  - location:
+      type: MODEL
+      name: ContractOverview.primary_agreement_defined_term
+    properties:
+      description: Primary agreement defined term, or short name of primary agreement
+  - location:
+      type: MODEL
+      name: ContractOverview.primary_agreement_url
+    properties:
+      description: Source URL for the contract, where it originated from online
+  - location:
+      type: MODEL
+      name: ContractOverview.primary_category_id
+    properties:
+      description: Category id of contract
+  - location:
+      type: MODEL
+      name: ContractOverview.product_suite_id
+    properties:
+      description: ID of product suite, or company, that contract belongs to
+  - location:
+      type: MODEL
+      name: ContractOverview.product_suite_name
+    properties:
+      description: Name of product suite, or company, that contract belongs to
+  - location:
+      type: MODEL
+      name: ContractOverview.product_suite_url
+    properties:
+      description: DEPRECATED
+  - location:
+      type: MODEL
+      name: ContractOverview.rating
+    properties:
+      description: Display friendly rating of contract. Will be one of `Customer Favorable`, `Vendor Favorable` or `Balanced`
+  - location:
+      type: MODEL
+      name: ContractOverview.rating_display
+    properties:
+      description: User friendly display of contract rating
+  - location:
+      type: MODEL
+      name: ContractOverview.rating_percentile
+    properties:
+      description: Number value of contract rating. On a scale of 0-10, 0 is Vendor Favorable, 5 is Balanced and 10 is Customer Favorable
+  - location:
+      type: MODEL
+      name: ContractOverview.raw_rating
+    properties:
+      description: Raw rating number of contract
+  - location:
+      type: MODEL
+      name: ContractOverview.secondary_categories
+    properties:
+      description: Secondary categories of contract
+  - location:
+      type: MODEL
+      name: ContractOverview.template_id
+    properties:
+      description: ID of the template this contract belongs to
+  - location:
+      type: MODEL
+      name: ContractOverview.template_name
+    properties:
+      description: Name of the template this contract belongs to, e.g., 'IT' or 'Business Intelligence Software'
+  - location:
+      type: MODEL
+      name: ContractOverview
+    properties:
+      description: Contract overview and general metadata
+  - location:
+      type: MODEL
+      name: ContractPosition.id
+    properties:
+      description: ID of the given contract position
+  - location:
+      type: MODEL
+      name: ContractPosition.name
+    properties:
+      description: Name of the given contract position
+  - location:
+      type: MODEL
+      name: ContractPosition.quantity
+    properties:
+      description: Number of contracts that meet that meet the criteria defined by the input query parameters
+  - location:
+      type: MODEL
+      name: ContractPosition
+    properties:
+      description: Frequency count for the given contract position
+  - location:
+      type: MODEL
+      name: ContractPositions
+    properties:
+      description: Frequency counts for all relevant contract positions
+  - location:
+      type: MODEL
+      name: ContractStatus.contract_id
+    properties:
+      description: ID of given contract
+  - location:
+      type: MODEL
+      name: ContractStatus.status
+    properties:
+      description: 'Status of given contract. Will be either: `In Progress` or `Completed`'
+  - location:
+      type: MODEL
+      name: ContractUpload.contract_id
+    properties:
+      description: ID of newly created contract
+  - location:
+      type: MODEL
+      name: ContractUpload.document_id
+    properties:
+      description: ID of document created
+  - location:
+      type: MODEL
+      name: Empty
+    properties:
+      title: Empty Schema
+  - location:
+      type: MODEL
+      name: ExtractedField.citation
+    properties:
+      description: 'Name of the citation in the contract that references the extracted field value '
+  - location:
+      type: MODEL
+      name: ExtractedField.contract_id
+    properties:
+      description: ID of given contract
+  - location:
+      type: MODEL
+      name: ExtractedField.extracted_field_data_type_id
+    properties:
+      description: ID of extracted field data type
+  - location:
+      type: MODEL
+      name: ExtractedField.extracted_field_id
+    properties:
+      description: ID of extracted field
+  - location:
+      type: MODEL
+      name: ExtractedField.extracted_field_measurement_id
+    properties:
+      description: ID of measurement
+  - location:
+      type: MODEL
+      name: ExtractedField.extracted_field_name
+    properties:
+      description: Name of the extracted field
+  - location:
+      type: MODEL
+      name: ExtractedField.measurement_name
+    properties:
+      description: Name of the measurement type. Used for adding context to the value. Examples include some common units of measurements for time and currencies, e.g., `USD` or `Days`
+  - location:
+      type: MODEL
+      name: ExtractedField.source_id
+    properties:
+      description: ID of the source/citation that references the extracted field value
+  - location:
+      type: MODEL
+      name: ExtractedField.source_language
+    properties:
+      description: Source language of contract that references the extracted field value
+  - location:
+      type: MODEL
+      name: ExtractedField.type_name
+    properties:
+      description: Name of data type of the given value
+  - location:
+      type: MODEL
+      name: ExtractedField.value
+    properties:
+      description: Value of the extracted field
+  - location:
+      type: MODEL
+      name: ExtractedField
+    properties:
+      description: Key data point extracted from the contract
+  - location:
+      type: MODEL
+      name: PlaybookDetail.acceptable_label_ids
+    properties:
+      description: DEPRECATED
+  - location:
+      type: MODEL
+      name: PlaybookDetail.answer_display
+    properties:
+      description: Short answer if question was addressed in contract. Can be `Yes`, `No`, `N\A` or `Null`
+  - location:
+      type: MODEL
+      name: PlaybookDetail.citation
+    properties:
+      description: Citation to the contract contract that refers to this question
+  - location:
+      type: MODEL
+      name: PlaybookDetail.display_name
+    properties:
+      description: Display name of the filter question
+  - location:
+      type: MODEL
+      name: PlaybookDetail.filter_passed
+    properties:
+      description: Result if the contract passed the filter question
+  - location:
+      type: MODEL
+      name: PlaybookDetail.filter_question_id
+    properties:
+      description: ID of the filter question
+  - location:
+      type: MODEL
+      name: PlaybookDetail.footnote
+    properties:
+      description: Footnotes to the customer
+  - location:
+      type: MODEL
+      name: PlaybookDetail.issue_number
+    properties:
+      description: Numerical ordering of clauses, grouped by tiers
+  - location:
+      type: MODEL
+      name: PlaybookDetail.question_id
+    properties:
+      description: ID of the question
+  - location:
+      type: MODEL
+      name: PlaybookDetail.rank
+    properties:
+      description: Rank
+  - location:
+      type: MODEL
+      name: PlaybookDetail.required_label_ids
+    properties:
+      description: DEPRECATED
+  - location:
+      type: MODEL
+      name: PlaybookDetail.selected_label_ids
+    properties:
+      description: DEPRECATED
+  - location:
+      type: MODEL
+      name: PlaybookDetail.tier
+    properties:
+      description: Tier level of the question. Lower number tiers have a greater influence on score.
+  - location:
+      type: MODEL
+      name: PlaybookDetail.unacceptable_label_ids
+    properties:
+      description: DEPRECATED
+  - location:
+      type: MODEL
+      name: PlaybookDetail.unselected_label_ids
+    properties:
+      description: DEPRECATED
+  - location:
+      type: MODEL
+      name: PlaybookDetail
+    properties:
+      description: Detailed reasons why a playbook question failed
+  - location:
+      type: MODEL
+      name: PlaybookPassFailDetail.is_fail
+    properties:
+      description: Result if label passed or failed
+  - location:
+      type: MODEL
+      name: PlaybookPassFailDetail.label_id
+    properties:
+      description: ID of the label
+  - location:
+      type: MODEL
+      name: PlaybookPassFailDetail.reason
+    properties:
+      description: 'Reason why the label passed or failed. Will be one of the following: `required_and_found`, `required_not_found`, `acceptable_and_found`, `acceptable_not_found`, `unacceptable_and_found`, `unacceptable_not_found`'
+  - location:
+      type: MODEL
+      name: PlaybookPassFailDetail.selection
+    properties:
+      description: 'Description of how the label should appear in the contract. Will be one of the following: `required`, `acceptable` or `unacceptable`'
+  - location:
+      type: MODEL
+      name: PlaybookPassFailDetail
+    properties:
+      description: Detailed list of labels that passed or failed and why
+  - location:
+      type: MODEL
+      name: PredictionDetail.contract_id
+    properties:
+      description: ID of the contract
+  - location:
+      type: MODEL
+      name: PredictionDetail
+    properties:
+      description: Fetch predicted labels and associated details for the given contract by topic
+  - location:
+      type: MODEL
+      name: PredictionDetailLabel.citation
+    properties:
+      description: Section identifier where the prediction was found
+  - location:
+      type: MODEL
+      name: PredictionDetailLabel.confidence
+    properties:
+      description: Prediction confidence
+  - location:
+      type: MODEL
+      name: PredictionDetailLabel.defined_term
+    properties:
+      description: Defined term of the document where the prediction was found
+  - location:
+      type: MODEL
+      name: PredictionDetailLabel.label_display
+    properties:
+      description: Display name of the label
+  - location:
+      type: MODEL
+      name: PredictionDetailLabel.label_id
+    properties:
+      description: ID of the label
+  - location:
+      type: MODEL
+      name: PredictionDetailLabel.selected
+    properties:
+      description: 'Whether or not the label was selected in the affirmative or not: 1 for selected and 0 for unselected'
+  - location:
+      type: MODEL
+      name: PredictionDetailLabel.source_language
+    properties:
+      description: Source language where the prediction was found
+  - location:
+      type: MODEL
+      name: PredictionDetailLabel
+    properties:
+      description: Details for a given predicted label
+  - location:
+      type: MODEL
+      name: PredictionDetailTopic.topic_id
+    properties:
+      description: ID of the topic
+  - location:
+      type: MODEL
+      name: PredictionDetailTopic.topic_name
+    properties:
+      description: Name of the topic
+  - location:
+      type: MODEL
+      name: PredictionDetailTopic
+    properties:
+      description: Topic metadata and label predictions for the given topic
+  - location:
+      type: MODEL
+      name: PredictionFlag.citation
+    properties:
+      description: Section identifier where the prediction was found
+  - location:
+      type: MODEL
+      name: PredictionFlag.confidence
+    properties:
+      description: Prediction confidence
+  - location:
+      type: MODEL
+      name: PredictionFlag.defined_term
+    properties:
+      description: Defined term of the document where the prediction was found
+  - location:
+      type: MODEL
+      name: PredictionFlag.label_display
+    properties:
+      description: Display name of the label
+  - location:
+      type: MODEL
+      name: PredictionFlag.label_id
+    properties:
+      description: ID of the label
+  - location:
+      type: MODEL
+      name: PredictionFlag.selected
+    properties:
+      description: 'Whether or not the label was selected in the affirmative or not: 1 for selected and 0 for unselected'
+  - location:
+      type: MODEL
+      name: PredictionFlag.source_language
+    properties:
+      description: Source language where the prediction was found
+  - location:
+      type: MODEL
+      name: PredictionFlag
+    properties:
+      description: Details for a given red flag
+  - location:
+      type: MODEL
+      name: PredictionFlags.contract_id
+    properties:
+      description: ID of the contract
+  - location:
+      type: MODEL
+      name: PredictionFlags
+    properties:
+      description: Predicted red flags for the given contract
+  - location:
+      type: MODEL
+      name: PredictionFlagsDetail.flag_count
+    properties:
+      description: Number of red flags identified for the given perspective
+  - location:
+      type: MODEL
+      name: PredictionFlagsDetail.name
+    properties:
+      description: Perspective name, eg. Customer, Vendor
+  - location:
+      type: MODEL
+      name: PredictionFlagsDetail
+    properties:
+      description: List of perspectives containing red flag count and details
+  - location:
+      type: MODEL
+      name: PredictionSummary.contract_id
+    properties:
+      description: ID of the contract
+  - location:
+      type: MODEL
+      name: PredictionSummary.summary
+    properties:
+      description: Summary of predicted labels for the given topic
+  - location:
+      type: MODEL
+      name: PredictionSummary.topic_id
+    properties:
+      description: ID of the topic
+  - location:
+      type: MODEL
+      name: PredictionSummary
+    properties:
+      description: Summary of predicted labels for a given contract and topic
+  - location:
+      type: PATH_PARAMETER
+      path: /contracts/{contract-id}/playbook-detail
+      method: GET
+      name: contract-id
+    properties:
+      description: Contract id
+  - location:
+      type: QUERY_PARAMETER
+      path: /contracts
+      method: POST
+      name: contract-id
+    properties:
+      description: ID of contract. If supplied, will update existing contract with new document
+  - location:
+      type: QUERY_PARAMETER
+      path: /contracts
+      method: POST
+      name: contract-position-id
+    properties:
+      description: 'Party that drafted the contract: Use ''1'' for vendor form and ''2'' for customer form'
+  - location:
+      type: QUERY_PARAMETER
+      path: /contracts
+      method: POST
+      name: defined-term
+    properties:
+      description: Defined term
+  - location:
+      type: QUERY_PARAMETER
+      path: /contracts
+      method: POST
+      name: document-id
+    properties:
+      description: ID of document. Include if replacing document
+  - location:
+      type: QUERY_PARAMETER
+      path: /contracts
+      method: POST
+      name: document-name
+    properties:
+      description: Name of submitted document
+  - location:
+      type: QUERY_PARAMETER
+      path: /contracts/{contract-id}/playbook-detail
+      method: GET
+      name: filter-id
+    properties:
+      description: ID of filter
+  - location:
+      type: QUERY_PARAMETER
+      path: /contracts
+      method: POST
+      name: is-public
+    properties:
+      description: Use '1' for public contracts and '0' for private contracts
+  - location:
+      type: QUERY_PARAMETER
+      path: /contract-positions
+      method: GET
+      name: label-id
+    properties:
+      description: ID of label to fetch counts for
+  - location:
+      type: QUERY_PARAMETER
+      path: /contracts/{contract-id}/citations
+      method: GET
+      name: label-id
+    properties:
+      description: ID of label to fetch citation for
+  - location:
+      type: QUERY_PARAMETER
+      path: /contracts
+      method: POST
+      name: party-a-defined-term
+    properties:
+      description: Name of the party A entity (vendor, discloser, issuing entity)
+  - location:
+      type: QUERY_PARAMETER
+      path: /contracts
+      method: POST
+      name: party-b-defined-term
+    properties:
+      description: Name of the party B entity (customer, receiver, investing entity)
+  - location:
+      type: QUERY_PARAMETER
+      path: /contracts/{contract-id}/citations
+      method: GET
+      name: question-id
+    properties:
+      description: ID of question to fetch citation for
+  - location:
+      type: QUERY_PARAMETER
+      path: /contracts
+      method: POST
+      name: review-level
+    properties:
+      description: 'Review level of the contract review: Use ''verified'' for human-in-the-loop and ''predicted'' for AI only'
+  - location:
+      type: QUERY_PARAMETER
+      path: /contract-positions
+      method: GET
+      name: selected
+    properties:
+      description: Set to `1` for counts where label is true, `0` for counts where label is false
+  - location:
+      type: QUERY_PARAMETER
+      path: /contract-positions
+      method: GET
+      name: template-id
+    properties:
+      description: ID of template to fetch counts for
+  - location:
+      type: QUERY_PARAMETER
+      path: /contracts
+      method: POST
+      name: template-id
+    properties:
+      description: ID of template
+  - location:
+      type: QUERY_PARAMETER
+      path: /contracts/{contract-id}/citations
+      method: GET
+      name: topic-id
+    properties:
+      description: ID of topic to fetch citation for
+  - location:
+      type: QUERY_PARAMETER
+      path: /contracts/{contract-id}/prediction-summary
+      method: GET
+      name: topic-id
+    properties:
+      description: ID of topic
+  - location:
+      type: QUERY_PARAMETER
+      path: /contracts
+      method: POST
+      name: url
+    properties:
+      description: URL of hosted public contract
+  - location:
+      type: RESOURCE
+      path: /certify
+    properties:
+      summary: Certify endpoint
+      description: Fetch data required for certify
+  - location:
+      type: RESPONSE
+      path: /categories/{category-id}/breakdown
+      method: GET
+      statusCode: '200'
+    properties:
+      description: 200 response
+  - location:
+      type: RESPONSE
+      path: /categories/{category-id}/breakdown
+      method: OPTIONS
+      statusCode: '200'
+    properties:
+      description: 200 response
+  - location:
+      type: RESPONSE
+      path: /categories/{category-id}
+      method: OPTIONS
+      statusCode: '200'
+    properties:
+      description: 200 response
+  - location:
+      type: RESPONSE
+      path: /categories
+      method: OPTIONS
+      statusCode: '200'
+    properties:
+      description: 200 response
+  - location:
+      type: RESPONSE
+      path: /certify/{certified-name}
+      method: GET
+      statusCode: '200'
+    properties:
+      description: 200 response
+  - location:
+      type: RESPONSE
+      path: /certify/{certified-name}
+      method: OPTIONS
+      statusCode: '200'
+    properties:
+      description: 200 response
+  - location:
+      type: RESPONSE
+      path: /certify
+      method: GET
+      statusCode: '200'
+    properties:
+      description: 200 response
+  - location:
+      type: RESPONSE
+      path: /certify
+      method: OPTIONS
+      statusCode: '200'
+    properties:
+      description: 200 response
+  - location:
+      type: RESPONSE
+      path: /clause-distance
+      method: GET
+      statusCode: '200'
+    properties:
+      description: 200 response
+  - location:
+      type: RESPONSE
+      path: /clause-distance
+      method: OPTIONS
+      statusCode: '200'
+    properties:
+      description: 200 response
+  - location:
+      type: RESPONSE
+      path: /clause-distance
+      method: POST
+      statusCode: '200'
+    properties:
+      description: 200 response
+  - location:
+      type: RESPONSE
+      path: /contract-positions
+      method: GET
+      statusCode: '200'
+    properties:
+      description: 200 response
+  - location:
+      type: RESPONSE
+      path: /contract-positions
+      method: OPTIONS
+      statusCode: '200'
+    properties:
+      description: 200 response
+  - location:
+      type: RESPONSE
+      path: /contracts/{contract-id}/benchmark-overview
+      method: GET
+      statusCode: '200'
+    properties:
+      description: 200 response
+  - location:
+      type: RESPONSE
+      path: /contracts/{contract-id}/benchmark-overview
+      method: OPTIONS
+      statusCode: '200'
+    properties:
+      description: 200 response
+  - location:
+      type: RESPONSE
+      path: /contracts/{contract-id}/citations
+      method: GET
+      statusCode: '200'
+    properties:
+      description: 200 response
+  - location:
+      type: RESPONSE
+      path: /contracts/{contract-id}/citations
+      method: OPTIONS
+      statusCode: '200'
+    properties:
+      description: 200 response
+  - location:
+      type: RESPONSE
+      path: /contracts/{contract-id}/documents
+      method: GET
+      statusCode: '200'
+    properties:
+      description: 200 response
+  - location:
+      type: RESPONSE
+      path: /contracts/{contract-id}/documents
+      method: OPTIONS
+      statusCode: '200'
+    properties:
+      description: 200 response
+  - location:
+      type: RESPONSE
+      path: /contracts/{contract-id}/extracted-fields
+      method: GET
+      statusCode: '200'
+    properties:
+      description: 200 response
+  - location:
+      type: RESPONSE
+      path: /contracts/{contract-id}/extracted-fields
+      method: OPTIONS
+      statusCode: '200'
+    properties:
+      description: 200 response
+  - location:
+      type: RESPONSE
+      path: /contracts/{contract-id}/key-topics
+      method: GET
+      statusCode: '200'
+    properties:
+      description: 200 response
+  - location:
+      type: RESPONSE
+      path: /contracts/{contract-id}/key-topics
+      method: OPTIONS
+      statusCode: '200'
+    properties:
+      description: 200 response
+  - location:
+      type: RESPONSE
+      path: /contracts/{contract-id}/market-deviations
+      method: GET
+      statusCode: '200'
+    properties:
+      description: 200 response
+  - location:
+      type: RESPONSE
+      path: /contracts/{contract-id}/market-deviations
+      method: OPTIONS
+      statusCode: '200'
+    properties:
+      description: 200 response
+  - location:
+      type: RESPONSE
+      path: /contracts/{contract-id}/overview-text
+      method: GET
+      statusCode: '200'
+    properties:
+      description: 200 response
+  - location:
+      type: RESPONSE
+      path: /contracts/{contract-id}/overview-text
+      method: OPTIONS
+      statusCode: '200'
+    properties:
+      description: 200 response
+  - location:
+      type: RESPONSE
+      path: /contracts/{contract-id}/overview
+      method: GET
+      statusCode: '200'
+    properties:
+      description: 200 response
+  - location:
+      type: RESPONSE
+      path: /contracts/{contract-id}/overview
+      method: OPTIONS
+      statusCode: '200'
+    properties:
+      description: 200 response
+  - location:
+      type: RESPONSE
+      path: /contracts/{contract-id}/playbook-detail
+      method: GET
+      statusCode: '200'
+    properties:
+      description: 200 response
+  - location:
+      type: RESPONSE
+      path: /contracts/{contract-id}/playbook-detail
+      method: OPTIONS
+      statusCode: '200'
+    properties:
+      description: 200 response
+  - location:
+      type: RESPONSE
+      path: /contracts/{contract-id}/playbooks-list
+      method: GET
+      statusCode: '200'
+    properties:
+      description: 200 response
+  - location:
+      type: RESPONSE
+      path: /contracts/{contract-id}/playbooks-list
+      method: OPTIONS
+      statusCode: '200'
+    properties:
+      description: 200 response
+  - location:
+      type: RESPONSE
+      path: /contracts/{contract-id}/status
+      method: GET
+      statusCode: '200'
+    properties:
+      description: 200 response
+  - location:
+      type: RESPONSE
+      path: /contracts/{contract-id}/status
+      method: OPTIONS
+      statusCode: '200'
+    properties:
+      description: 200 response
+  - location:
+      type: RESPONSE
+      path: /contracts/{contract-id}/topics/{topic-id}/details
+      method: GET
+      statusCode: '200'
+    properties:
+      description: 200 response
+  - location:
+      type: RESPONSE
+      path: /contracts/{contract-id}/topics/{topic-id}/details
+      method: OPTIONS
+      statusCode: '200'
+    properties:
+      description: 200 response
+  - location:
+      type: RESPONSE
+      path: /contracts/{contract-id}/topics/{topic-id}
+      method: OPTIONS
+      statusCode: '200'
+    properties:
+      description: 200 response
+  - location:
+      type: RESPONSE
+      path: /contracts/{contract-id}/topics
+      method: GET
+      statusCode: '200'
+    properties:
+      description: 200 response
+  - location:
+      type: RESPONSE
+      path: /contracts/{contract-id}/topics
+      method: OPTIONS
+      statusCode: '200'
+    properties:
+      description: 200 response
+  - location:
+      type: RESPONSE
+      path: /contracts/{contract-id}/unique-clauses
+      method: GET
+      statusCode: '200'
+    properties:
+      description: 200 response
+  - location:
+      type: RESPONSE
+      path: /contracts/{contract-id}/unique-clauses
+      method: OPTIONS
+      statusCode: '200'
+    properties:
+      description: 200 response
+  - location:
+      type: RESPONSE
+      path: /contracts/{contract-id}
+      method: OPTIONS
+      statusCode: '200'
+    properties:
+      description: 200 response
+  - location:
+      type: RESPONSE
+      path: /contracts
+      method: GET
+      statusCode: '200'
+    properties:
+      description: 200 response
+  - location:
+      type: RESPONSE
+      path: /contracts
+      method: OPTIONS
+      statusCode: '200'
+    properties:
+      description: 200 response
+  - location:
+      type: RESPONSE
+      path: /contracts
+      method: POST
+      statusCode: '200'
+    properties:
+      description: 200 response
+  - location:
+      type: RESPONSE
+      path: /docs
+      method: GET
+      statusCode: '200'
+    properties:
+      description: 200 response
+  - location:
+      type: RESPONSE
+      path: /docs
+      method: OPTIONS
+      statusCode: '200'
+    properties:
+      description: 200 response
+  - location:
+      type: RESPONSE
+      path: /document-metadata
+      method: GET
+      statusCode: '200'
+    properties:
+      description: 200 response
+  - location:
+      type: RESPONSE
+      path: /document-metadata
+      method: OPTIONS
+      statusCode: '200'
+    properties:
+      description: 200 response
+  - location:
+      type: RESPONSE
+      path: /generate-contract
+      method: GET
+      statusCode: '200'
+    properties:
+      description: 200 response
+  - location:
+      type: RESPONSE
+      path: /generate-contract
+      method: OPTIONS
+      statusCode: '200'
+    properties:
+      description: 200 response
+  - location:
+      type: RESPONSE
+      path: /generate-contract
+      method: POST
+      statusCode: '200'
+    properties:
+      description: 200 response
+  - location:
+      type: RESPONSE
+      path: /id-resolver
+      method: GET
+      statusCode: '200'
+    properties:
+      description: 200 response
+  - location:
+      type: RESPONSE
+      path: /id-resolver
+      method: OPTIONS
+      statusCode: '200'
+    properties:
+      description: 200 response
+  - location:
+      type: RESPONSE
+      path: /labels/{label-id}/contract-ids
+      method: GET
+      statusCode: '200'
+    properties:
+      description: 200 response
+  - location:
+      type: RESPONSE
+      path: /labels/{label-id}/contract-ids
+      method: OPTIONS
+      statusCode: '200'
+    properties:
+      description: 200 response
+  - location:
+      type: RESPONSE
+      path: /labels/{label-id}
+      method: OPTIONS
+      statusCode: '200'
+    properties:
+      description: 200 response
+  - location:
+      type: RESPONSE
+      path: /labels
+      method: OPTIONS
+      statusCode: '200'
+    properties:
+      description: 200 response
+  - location:
+      type: RESPONSE
+      path: /market-insights
+      method: GET
+      statusCode: '200'
+    properties:
+      description: 200 response
+  - location:
+      type: RESPONSE
+      path: /market-insights
+      method: OPTIONS
+      statusCode: '200'
+    properties:
+      description: 200 response
+  - location:
+      type: RESPONSE
+      path: /prediction-backlog
+      method: GET
+      statusCode: '200'
+    properties:
+      description: 200 response
+  - location:
+      type: RESPONSE
+      path: /prediction-backlog
+      method: OPTIONS
+      statusCode: '200'
+    properties:
+      description: 200 response
+  - location:
+      type: RESPONSE
+      path: /product-suites/{id}/citations
+      method: GET
+      statusCode: '200'
+    properties:
+      description: 200 response
+  - location:
+      type: RESPONSE
+      path: /product-suites/{id}/citations
+      method: OPTIONS
+      statusCode: '200'
+    properties:
+      description: 200 response
+  - location:
+      type: RESPONSE
+      path: /product-suites/{id}/documents
+      method: GET
+      statusCode: '200'
+    properties:
+      description: 200 response
+  - location:
+      type: RESPONSE
+      path: /product-suites/{id}/documents
+      method: OPTIONS
+      statusCode: '200'
+    properties:
+      description: 200 response
+  - location:
+      type: RESPONSE
+      path: /product-suites/{id}/key-topics
+      method: GET
+      statusCode: '200'
+    properties:
+      description: 200 response
+  - location:
+      type: RESPONSE
+      path: /product-suites/{id}/key-topics
+      method: OPTIONS
+      statusCode: '200'
+    properties:
+      description: 200 response
+  - location:
+      type: RESPONSE
+      path: /product-suites/{id}/overview-text
+      method: GET
+      statusCode: '200'
+    properties:
+      description: 200 response
+  - location:
+      type: RESPONSE
+      path: /product-suites/{id}/overview-text
+      method: OPTIONS
+      statusCode: '200'
+    properties:
+      description: 200 response
+  - location:
+      type: RESPONSE
+      path: /product-suites/{id}/preview
+      method: GET
+      statusCode: '200'
+    properties:
+      description: 200 response
+  - location:
+      type: RESPONSE
+      path: /product-suites/{id}/preview
+      method: OPTIONS
+      statusCode: '200'
+    properties:
+      description: 200 response
+  - location:
+      type: RESPONSE
+      path: /product-suites/{id}/topics/{topic-id}/details
+      method: GET
+      statusCode: '200'
+    properties:
+      description: 200 response
+  - location:
+      type: RESPONSE
+      path: /product-suites/{id}/topics/{topic-id}/details
+      method: OPTIONS
+      statusCode: '200'
+    properties:
+      description: 200 response
+  - location:
+      type: RESPONSE
+      path: /product-suites/{id}/topics/{topic-id}
+      method: GET
+      statusCode: '200'
+    properties:
+      description: 200 response
+  - location:
+      type: RESPONSE
+      path: /product-suites/{id}/topics
+      method: GET
+      statusCode: '200'
+    properties:
+      description: 200 response
+  - location:
+      type: RESPONSE
+      path: /product-suites/{id}/topics
+      method: OPTIONS
+      statusCode: '200'
+    properties:
+      description: 200 response
+  - location:
+      type: RESPONSE
+      path: /product-suites
+      method: GET
+      statusCode: '200'
+    properties:
+      description: 200 response
+  - location:
+      type: RESPONSE
+      path: /product-suites
+      method: OPTIONS
+      statusCode: '200'
+    properties:
+      description: 200 response
+  - location:
+      type: RESPONSE
+      path: /search/categories
+      method: GET
+      statusCode: '200'
+    properties:
+      description: 200 response
+  - location:
+      type: RESPONSE
+      path: /search/categories
+      method: OPTIONS
+      statusCode: '200'
+    properties:
+      description: 200 response
+  - location:
+      type: RESPONSE
+      path: /search/contracts
+      method: GET
+      statusCode: '200'
+    properties:
+      description: 200 response
+  - location:
+      type: RESPONSE
+      path: /search/contracts
+      method: OPTIONS
+      statusCode: '200'
+    properties:
+      description: 200 response
+  - location:
+      type: RESPONSE
+      path: /search/labels
+      method: GET
+      statusCode: '200'
+    properties:
+      description: 200 response
+  - location:
+      type: RESPONSE
+      path: /search/labels
+      method: OPTIONS
+      statusCode: '200'
+    properties:
+      description: 200 response
+  - location:
+      type: RESPONSE
+      path: /search
+      method: OPTIONS
+      statusCode: '200'
+    properties:
+      description: 200 response
+  - location:
+      type: RESPONSE
+      path: /topics/{topic-id}/subtopics
+      method: GET
+      statusCode: '200'
+    properties:
+      description: 200 response
+  - location:
+      type: RESPONSE
+      path: /topics/{topic-id}/subtopics
+      method: OPTIONS
+      statusCode: '200'
+    properties:
+      description: 200 response
+  - location:
+      type: RESPONSE
+      path: /topics/{topic-id}
+      method: OPTIONS
+      statusCode: '200'
+    properties:
+      description: 200 response
+  - location:
+      type: RESPONSE
+      path: /topics
+      method: GET
+      statusCode: '200'
+    properties:
+      description: 200 response
+  - location:
+      type: RESPONSE
+      path: /topics
+      method: OPTIONS
+      statusCode: '200'
+    properties:
+      description: 200 response
+  - location:
+      type: RESPONSE
+      path: /users/payments
+      method: GET
+      statusCode: '200'
+    properties:
+      description: 200 response
+  - location:
+      type: RESPONSE
+      path: /users/payments
+      method: OPTIONS
+      statusCode: '200'
+    properties:
+      description: 200 response
+x-amazon-apigateway-gateway-responses:
+  DEFAULT_5XX:
+    responseParameters:
+      gatewayresponse.header.Access-Control-Allow-Methods: '''OPTIONS,POST'''
+      gatewayresponse.header.Access-Control-Allow-Credentials: '''true'''
+      gatewayresponse.header.Access-Control-Allow-Origin: '''*'''
+      gatewayresponse.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'''
+  DEFAULT_4XX:
+    responseParameters:
+      gatewayresponse.header.Access-Control-Allow-Methods: '''OPTIONS,POST'''
+      gatewayresponse.header.Access-Control-Allow-Credentials: '''true'''
+      gatewayresponse.header.Access-Control-Allow-Origin: '''*'''
+      gatewayresponse.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'''
+x-amazon-apigateway-binary-media-types:
+- application/pdf
