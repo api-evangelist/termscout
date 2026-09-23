@@ -1,7 +1,16 @@
 openapi: 3.2.0
 info:
   title: termscout-data Contracts API
-  description: "TermScout API \n\nAll requests require both authentication and an API key.\n\nOath and Basic auth are supported.\n\nAll query params are `kebob-case`, all responses are `snake_case`"
+  description: 'TermScout API
+
+
+    All requests require both authentication and an API key.
+
+
+    Oath and Basic auth are supported.
+
+
+    All query params are `kebob-case`, all responses are `snake_case`'
   version: '2022-07-19T16:30:18Z'
 servers:
 - url: https://api.termscout.com
@@ -40,9 +49,23 @@ paths:
         type: aws_proxy
       tags:
       - Contracts
+      operationId: getContracts
+      x-operation-id-source: derived
     post:
       summary: Upload a contract
-      description: "Endpoint to upload a contract. Currently supports .pdf, .docx and .txt. \n\nA base64 encoded byte string for the document data is required as the POST body.\n\nTo upload multiple documents, POST with the primary document, retrieve the returned `contract-id` then repeat the same step for each new document, including the `contract_id` in the subsequent requests to associate multiple documents with the same contract.\n\nIf submitted without a `contract-id`, will create a new contract and return a new `contract-id` and a `document-id`. \n\nIf submitted with a `document-id`, will replace that document with the new document"
+      description: 'Endpoint to upload a contract. Currently supports .pdf, .docx and .txt.
+
+
+        A base64 encoded byte string for the document data is required as the POST body.
+
+
+        To upload multiple documents, POST with the primary document, retrieve the returned `contract-id` then repeat the same step for each new document, including the `contract_id` in the subsequent requests to associate multiple documents with the same contract.
+
+
+        If submitted without a `contract-id`, will create a new contract and return a new `contract-id` and a `document-id`.
+
+
+        If submitted with a `document-id`, will replace that document with the new document'
       parameters:
       - name: document-name
         in: query
@@ -129,10 +152,15 @@ paths:
         type: aws_proxy
       tags:
       - Contracts
+      operationId: postContracts
+      x-operation-id-source: derived
   /contracts/{contract-id}/citations:
     get:
       summary: Citations and source language
-      description: "Citations and source language on a given contract. Without any query parameters, will return all citations for a given contract. \n\n To filter on a specific question or label, include *one* of either a `label-id` a `question-id`, or a `topic-id`"
+      description: 'Citations and source language on a given contract. Without any query parameters, will return all citations for a given contract.
+
+
+        To filter on a specific question or label, include *one* of either a `label-id` a `question-id`, or a `topic-id`'
       parameters:
       - name: contract-id
         in: path
@@ -176,10 +204,11 @@ paths:
         type: aws_proxy
       tags:
       - Contracts
+      operationId: getContractsByContractIdCitations
+      x-operation-id-source: derived
   /contracts/{contract-id}/extracted-fields:
     get:
       summary: Key data points for a contract
-      description: Key data points for a contract
       parameters:
       - name: contract-id
         in: path
@@ -208,6 +237,8 @@ paths:
         type: aws_proxy
       tags:
       - Contracts
+      operationId: getContractsByContractIdExtractedFields
+      x-operation-id-source: derived
   /contracts/{contract-id}/overview:
     get:
       summary: General overview and metadata for a given contract
@@ -239,6 +270,8 @@ paths:
         type: aws_proxy
       tags:
       - Contracts
+      operationId: getContractsByContractIdOverview
+      x-operation-id-source: derived
   /contracts/{contract-id}/playbook-detail:
     get:
       summary: Playbook results
@@ -277,6 +310,8 @@ paths:
         type: aws_proxy
       tags:
       - Contracts
+      operationId: getContractsByContractIdPlaybookDetail
+      x-operation-id-source: derived
   /contracts/{contract-id}/prediction-detail:
     get:
       summary: Predicted labels
@@ -309,6 +344,8 @@ paths:
         type: aws_proxy
       tags:
       - Contracts
+      operationId: getContractsByContractIdPredictionDetail
+      x-operation-id-source: derived
   /contracts/{contract-id}/prediction-flags:
     get:
       summary: Predicted red flags
@@ -341,6 +378,8 @@ paths:
         type: aws_proxy
       tags:
       - Contracts
+      operationId: getContractsByContractIdPredictionFlags
+      x-operation-id-source: derived
   /contracts/{contract-id}/prediction-summary:
     get:
       summary: Prediction summary
@@ -379,6 +418,8 @@ paths:
         type: aws_proxy
       tags:
       - Contracts
+      operationId: getContractsByContractIdPredictionSummary
+      x-operation-id-source: derived
   /contracts/{contract-id}/status:
     get:
       summary: Status of a contract
@@ -411,160 +452,51 @@ paths:
         type: aws_proxy
       tags:
       - Contracts
+      operationId: getContractsByContractIdStatus
+      x-operation-id-source: derived
 components:
   schemas:
-    ContractList:
-      type: array
-      description: Item for ContractList, contains contract status and basic information
-      items:
-        type: object
-        properties:
-          contract_id:
-            type: string
-            description: ID of the ontract
-          status:
-            type: string
-            description: Status of the contract
-          template_id:
-            type: number
-            description: Template id of the contract
-          primary_agreement:
-            type: string
-            description: Primary agreement name of the contract
-    PredictionFlagsDetail:
+    ExtractedField:
       type: object
       properties:
-        name:
-          type: string
-          description: Perspective name, eg. Customer, Vendor
-        flag_count:
+        extracted_field_id:
           type: number
-          description: Number of red flags identified for the given perspective
-        flags:
-          type: array
-          items:
-            $ref: '#/components/schemas/PredictionFlag'
-      description: List of perspectives containing red flag count and details
-    PredictionFlags:
-      type: object
-      properties:
-        contract_id:
-          type: string
-          description: ID of the contract
-        details:
-          type: array
-          items:
-            $ref: '#/components/schemas/PredictionFlagsDetail'
-      description: Predicted red flags for the given contract
-    PredictionDetailTopic:
-      type: object
-      properties:
-        topic_id:
-          type: number
-          description: ID of the topic
-        topic_name:
-          type: string
-          description: Name of the topic
-        predictions:
-          type: array
-          items:
-            $ref: '#/components/schemas/PredictionDetailLabel'
-      description: Topic metadata and label predictions for the given topic
-    ContractStatus:
-      type: object
-      properties:
+          description: ID of extracted field
+          format: integer
         contract_id:
           type: string
           description: ID of given contract
-        status:
-          type: string
-          description: 'Status of given contract. Will be either: `In Progress` or `Completed`'
-          enum:
-          - In Progress
-          - Completed
-          - Failed
-    PlaybookPassFailDetail:
-      type: object
-      properties:
-        selection:
-          type: string
-          description: 'Description of how the label should appear in the contract. Will be one of the following: `required`, `acceptable` or `unacceptable`'
-        reason:
-          type: string
-          description: 'Reason why the label passed or failed. Will be one of the following: `required_and_found`, `required_not_found`, `acceptable_and_found`, `acceptable_not_found`, `unacceptable_and_found`, `unacceptable_not_found`'
-        is_fail:
+        extracted_field_measurement_id:
           type: number
-          description: Result if label passed or failed
-        label_id:
-          type: string
-          description: ID of the label
-      description: Detailed list of labels that passed or failed and why
-    ContractUpload:
-      type: object
-      properties:
-        contract_id:
-          type: string
-          description: ID of newly created contract
-        document_id:
-          type: string
-          description: ID of document created
-    PredictionSummary:
-      type: object
-      properties:
-        contract_id:
-          type: string
-          description: ID of the contract
-        topic_id:
+          description: ID of measurement
+          format: integer
+        extracted_field_data_type_id:
           type: number
-          description: ID of the topic
-        summary:
-          type: string
-          description: Summary of predicted labels for the given topic
-      description: Summary of predicted labels for a given contract and topic
-    Citations:
-      type: array
-      items:
-        $ref: '#/components/schemas/Citation'
-    PredictionDetail:
-      type: object
-      properties:
-        contract_id:
-          type: string
-          description: ID of the contract
-        details:
-          type: array
-          items:
-            $ref: '#/components/schemas/PredictionDetailTopic'
-      description: Fetch predicted labels and associated details for the given contract by topic
-    PredictionFlag:
-      type: object
-      properties:
-        label_id:
+          description: ID of extracted field data type
+          format: integer
+        source_id:
           type: number
-          description: ID of the label
-        label_display:
+          description: ID of the source/citation that references the extracted field value
+          format: integer
+        value:
           type: string
-          description: Display name of the label
-        confidence:
-          type: number
-          description: Prediction confidence
-        defined_term:
+          description: Value of the extracted field
+        extracted_field_name:
           type: string
-          description: Defined term of the document where the prediction was found
-        citation:
+          description: Name of the extracted field
+        measurement_name:
           type: string
-          description: Section identifier where the prediction was found
+          description: Name of the measurement type. Used for adding context to the value. Examples include some common units of measurements for time and currencies, e.g., `USD` or `Days`
+        type_name:
+          type: string
+          description: Name of data type of the given value
         source_language:
           type: string
-          description: Source language where the prediction was found
-        selected:
-          type: number
-          description: 'Whether or not the label was selected in the affirmative or not: 1 for selected and 0 for unselected'
-      description: Details for a given red flag
-    ExtractedFields:
-      type: array
-      items:
-        $ref: '#/components/schemas/ExtractedField'
+          description: Source language of contract that references the extracted field value
+        citation:
+          type: string
+          description: 'Name of the citation in the contract that references the extracted field value '
+      description: Key data point extracted from the contract
     PlaybookDetail:
       type: object
       properties:
@@ -633,6 +565,174 @@ components:
           items:
             $ref: '#/components/schemas/PlaybookPassFailDetail'
       description: Detailed reasons why a playbook question failed
+    ExtractedFields:
+      type: array
+      items:
+        $ref: '#/components/schemas/ExtractedField'
+    ContractStatus:
+      type: object
+      properties:
+        contract_id:
+          type: string
+          description: ID of given contract
+        status:
+          type: string
+          description: 'Status of given contract. Will be either: `In Progress` or `Completed`'
+          enum:
+          - In Progress
+          - Completed
+          - Failed
+    PredictionFlags:
+      type: object
+      properties:
+        contract_id:
+          type: string
+          description: ID of the contract
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/PredictionFlagsDetail'
+      description: Predicted red flags for the given contract
+    ContractList:
+      type: array
+      description: Item for ContractList, contains contract status and basic information
+      items:
+        type: object
+        properties:
+          contract_id:
+            type: string
+            description: ID of the ontract
+          status:
+            type: string
+            description: Status of the contract
+          template_id:
+            type: number
+            description: Template id of the contract
+          primary_agreement:
+            type: string
+            description: Primary agreement name of the contract
+    PredictionFlag:
+      type: object
+      properties:
+        label_id:
+          type: number
+          description: ID of the label
+        label_display:
+          type: string
+          description: Display name of the label
+        confidence:
+          type: number
+          description: Prediction confidence
+        defined_term:
+          type: string
+          description: Defined term of the document where the prediction was found
+        citation:
+          type: string
+          description: Section identifier where the prediction was found
+        source_language:
+          type: string
+          description: Source language where the prediction was found
+        selected:
+          type: number
+          description: 'Whether or not the label was selected in the affirmative or not: 1 for selected and 0 for unselected'
+      description: Details for a given red flag
+    PredictionSummary:
+      type: object
+      properties:
+        contract_id:
+          type: string
+          description: ID of the contract
+        topic_id:
+          type: number
+          description: ID of the topic
+        summary:
+          type: string
+          description: Summary of predicted labels for the given topic
+      description: Summary of predicted labels for a given contract and topic
+    PredictionDetailLabel:
+      type: object
+      properties:
+        label_id:
+          type: number
+          description: ID of the label
+        label_display:
+          type: string
+          description: Display name of the label
+        confidence:
+          type: number
+          description: Prediction confidence
+        defined_term:
+          type: string
+          description: Defined term of the document where the prediction was found
+        citation:
+          type: string
+          description: Section identifier where the prediction was found
+        source_language:
+          type: string
+          description: Source language where the prediction was found
+        selected:
+          type: number
+          description: 'Whether or not the label was selected in the affirmative or not: 1 for selected and 0 for unselected'
+      description: Details for a given predicted label
+    PredictionDetail:
+      type: object
+      properties:
+        contract_id:
+          type: string
+          description: ID of the contract
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/PredictionDetailTopic'
+      description: Fetch predicted labels and associated details for the given contract by topic
+    PredictionDetailTopic:
+      type: object
+      properties:
+        topic_id:
+          type: number
+          description: ID of the topic
+        topic_name:
+          type: string
+          description: Name of the topic
+        predictions:
+          type: array
+          items:
+            $ref: '#/components/schemas/PredictionDetailLabel'
+      description: Topic metadata and label predictions for the given topic
+    PlaybookPassFailDetail:
+      type: object
+      properties:
+        selection:
+          type: string
+          description: 'Description of how the label should appear in the contract. Will be one of the following: `required`, `acceptable` or `unacceptable`'
+        reason:
+          type: string
+          description: 'Reason why the label passed or failed. Will be one of the following: `required_and_found`, `required_not_found`, `acceptable_and_found`, `acceptable_not_found`, `unacceptable_and_found`, `unacceptable_not_found`'
+        is_fail:
+          type: number
+          description: Result if label passed or failed
+        label_id:
+          type: string
+          description: ID of the label
+      description: Detailed list of labels that passed or failed and why
+    Citations:
+      type: array
+      items:
+        $ref: '#/components/schemas/Citation'
+    PredictionFlagsDetail:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Perspective name, eg. Customer, Vendor
+        flag_count:
+          type: number
+          description: Number of red flags identified for the given perspective
+        flags:
+          type: array
+          items:
+            $ref: '#/components/schemas/PredictionFlag'
+      description: List of perspectives containing red flag count and details
     ContractOverview:
       type: object
       properties:
@@ -741,31 +841,15 @@ components:
           description: DEPRECATED
           deprecated: true
       description: Contract overview and general metadata
-    PredictionDetailLabel:
+    ContractUpload:
       type: object
       properties:
-        label_id:
-          type: number
-          description: ID of the label
-        label_display:
+        contract_id:
           type: string
-          description: Display name of the label
-        confidence:
-          type: number
-          description: Prediction confidence
-        defined_term:
+          description: ID of newly created contract
+        document_id:
           type: string
-          description: Defined term of the document where the prediction was found
-        citation:
-          type: string
-          description: Section identifier where the prediction was found
-        source_language:
-          type: string
-          description: Source language where the prediction was found
-        selected:
-          type: number
-          description: 'Whether or not the label was selected in the affirmative or not: 1 for selected and 0 for unselected'
-      description: Details for a given predicted label
+          description: ID of document created
     Citation:
       title: Citation
       type: object
@@ -776,47 +860,6 @@ components:
         source_langauge:
           type: string
           description: Source language of the citation
-    ExtractedField:
-      type: object
-      properties:
-        extracted_field_id:
-          type: number
-          description: ID of extracted field
-          format: integer
-        contract_id:
-          type: string
-          description: ID of given contract
-        extracted_field_measurement_id:
-          type: number
-          description: ID of measurement
-          format: integer
-        extracted_field_data_type_id:
-          type: number
-          description: ID of extracted field data type
-          format: integer
-        source_id:
-          type: number
-          description: ID of the source/citation that references the extracted field value
-          format: integer
-        value:
-          type: string
-          description: Value of the extracted field
-        extracted_field_name:
-          type: string
-          description: Name of the extracted field
-        measurement_name:
-          type: string
-          description: Name of the measurement type. Used for adding context to the value. Examples include some common units of measurements for time and currencies, e.g., `USD` or `Days`
-        type_name:
-          type: string
-          description: Name of data type of the given value
-        source_language:
-          type: string
-          description: Source language of contract that references the extracted field value
-        citation:
-          type: string
-          description: 'Name of the citation in the contract that references the extracted field value '
-      description: Key data point extracted from the contract
   securitySchemes:
     api_key:
       type: apiKey

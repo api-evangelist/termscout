@@ -1,7 +1,16 @@
 openapi: 3.2.0
 info:
   title: termscout-data Contract Positions API
-  description: "TermScout API \n\nAll requests require both authentication and an API key.\n\nOath and Basic auth are supported.\n\nAll query params are `kebob-case`, all responses are `snake_case`"
+  description: 'TermScout API
+
+
+    All requests require both authentication and an API key.
+
+
+    Oath and Basic auth are supported.
+
+
+    All query params are `kebob-case`, all responses are `snake_case`'
   version: '2022-07-19T16:30:18Z'
 servers:
 - url: https://api.termscout.com
@@ -11,7 +20,13 @@ paths:
   /contract-positions:
     get:
       summary: Market data across contract positions
-      description: "Frequency counts based on TermScout's market data across contract positons. Without any query parameters, will return total contract counts for each contract position, defaulting to the IT template.\n\n  To filter on a specific template or label, include a `template-id`, `label-id` and `selected`. Set `selected` to `1` for frequency counts where the given label is true. Set `selected` to `0` for frequency counts where the label is not true.\n\n  To construct frequency percentages for a given label, first call the endpoint with no `label-id` to get the denominator. Then call the endpoint with `label-id` and `selected` included to get the numerator. Then you can divide the numerator by the denominator for each contract position returned."
+      description: 'Frequency counts based on TermScout''s market data across contract positons. Without any query parameters, will return total contract counts for each contract position, defaulting to the IT template.
+
+
+        To filter on a specific template or label, include a `template-id`, `label-id` and `selected`. Set `selected` to `1` for frequency counts where the given label is true. Set `selected` to `0` for frequency counts where the label is not true.
+
+
+        To construct frequency percentages for a given label, first call the endpoint with no `label-id` to get the denominator. Then call the endpoint with `label-id` and `selected` included to get the numerator. Then you can divide the numerator by the denominator for each contract position returned.'
       parameters:
       - name: template-id
         in: query
@@ -57,6 +72,8 @@ paths:
         type: aws_proxy
       tags:
       - Contract Positions
+      operationId: getContractPositions
+      x-operation-id-source: derived
 components:
   schemas:
     ContractPosition:

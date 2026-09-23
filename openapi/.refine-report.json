@@ -1,0 +1,37 @@
+{
+  "provider": "termscout",
+  "sources": [
+    "_original/termscout-data-openapi.yml"
+  ],
+  "outputs": [
+    "termscout-contract-positions-api-openapi.yml",
+    "termscout-contracts-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [
+    "1 archived document(s) dropped as subsets of other archived documents",
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "termscout-data-openapi.yml: upgraded openapi 3.0.1 -> OpenAPI 3.2.0",
+    "termscout-data-openapi.yml: tagged paths GET /contract-positions -> Contract Positions",
+    "termscout-data-openapi.yml: tagged paths GET /contracts -> Contracts",
+    "termscout-data-openapi.yml: tagged paths POST /contracts -> Contracts",
+    "termscout-data-openapi.yml: tagged paths GET /contracts/{contract-id}/citations -> Contracts",
+    "termscout-data-openapi.yml: tagged paths GET /contracts/{contract-id}/extracted-fields -> Contracts",
+    "termscout-data-openapi.yml: tagged paths GET /contracts/{contract-id}/overview -> Contracts",
+    "termscout-data-openapi.yml: tagged paths GET /contracts/{contract-id}/playbook-detail -> Contracts",
+    "termscout-data-openapi.yml: tagged paths GET /contracts/{contract-id}/prediction-detail -> Contracts",
+    "termscout-data-openapi.yml: tagged paths GET /contracts/{contract-id}/prediction-flags -> Contracts",
+    "termscout-data-openapi.yml: tagged paths GET /contracts/{contract-id}/prediction-summary -> Contracts",
+    "termscout-data-openapi.yml: tagged paths GET /contracts/{contract-id}/status -> Contracts",
+    "termscout-data-openapi.yml: declared missing tag: Contract Positions",
+    "termscout-data-openapi.yml: declared missing tag: Contracts",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "_original/termscout-openapi.json: archived document superseded by a larger archived document",
+    "termscout-contract-positions-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "termscout-contracts-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
+}
