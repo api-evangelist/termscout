@@ -456,47 +456,6 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    ExtractedField:
-      type: object
-      properties:
-        extracted_field_id:
-          type: number
-          description: ID of extracted field
-          format: integer
-        contract_id:
-          type: string
-          description: ID of given contract
-        extracted_field_measurement_id:
-          type: number
-          description: ID of measurement
-          format: integer
-        extracted_field_data_type_id:
-          type: number
-          description: ID of extracted field data type
-          format: integer
-        source_id:
-          type: number
-          description: ID of the source/citation that references the extracted field value
-          format: integer
-        value:
-          type: string
-          description: Value of the extracted field
-        extracted_field_name:
-          type: string
-          description: Name of the extracted field
-        measurement_name:
-          type: string
-          description: Name of the measurement type. Used for adding context to the value. Examples include some common units of measurements for time and currencies, e.g., `USD` or `Days`
-        type_name:
-          type: string
-          description: Name of data type of the given value
-        source_language:
-          type: string
-          description: Source language of contract that references the extracted field value
-        citation:
-          type: string
-          description: 'Name of the citation in the contract that references the extracted field value '
-      description: Key data point extracted from the contract
     PlaybookDetail:
       type: object
       properties:
@@ -565,140 +524,15 @@ components:
           items:
             $ref: '#/components/schemas/PlaybookPassFailDetail'
       description: Detailed reasons why a playbook question failed
-    ExtractedFields:
-      type: array
-      items:
-        $ref: '#/components/schemas/ExtractedField'
-    ContractStatus:
+    ContractUpload:
       type: object
       properties:
         contract_id:
           type: string
-          description: ID of given contract
-        status:
+          description: ID of newly created contract
+        document_id:
           type: string
-          description: 'Status of given contract. Will be either: `In Progress` or `Completed`'
-          enum:
-          - In Progress
-          - Completed
-          - Failed
-    PredictionFlags:
-      type: object
-      properties:
-        contract_id:
-          type: string
-          description: ID of the contract
-        details:
-          type: array
-          items:
-            $ref: '#/components/schemas/PredictionFlagsDetail'
-      description: Predicted red flags for the given contract
-    ContractList:
-      type: array
-      description: Item for ContractList, contains contract status and basic information
-      items:
-        type: object
-        properties:
-          contract_id:
-            type: string
-            description: ID of the ontract
-          status:
-            type: string
-            description: Status of the contract
-          template_id:
-            type: number
-            description: Template id of the contract
-          primary_agreement:
-            type: string
-            description: Primary agreement name of the contract
-    PredictionFlag:
-      type: object
-      properties:
-        label_id:
-          type: number
-          description: ID of the label
-        label_display:
-          type: string
-          description: Display name of the label
-        confidence:
-          type: number
-          description: Prediction confidence
-        defined_term:
-          type: string
-          description: Defined term of the document where the prediction was found
-        citation:
-          type: string
-          description: Section identifier where the prediction was found
-        source_language:
-          type: string
-          description: Source language where the prediction was found
-        selected:
-          type: number
-          description: 'Whether or not the label was selected in the affirmative or not: 1 for selected and 0 for unselected'
-      description: Details for a given red flag
-    PredictionSummary:
-      type: object
-      properties:
-        contract_id:
-          type: string
-          description: ID of the contract
-        topic_id:
-          type: number
-          description: ID of the topic
-        summary:
-          type: string
-          description: Summary of predicted labels for the given topic
-      description: Summary of predicted labels for a given contract and topic
-    PredictionDetailLabel:
-      type: object
-      properties:
-        label_id:
-          type: number
-          description: ID of the label
-        label_display:
-          type: string
-          description: Display name of the label
-        confidence:
-          type: number
-          description: Prediction confidence
-        defined_term:
-          type: string
-          description: Defined term of the document where the prediction was found
-        citation:
-          type: string
-          description: Section identifier where the prediction was found
-        source_language:
-          type: string
-          description: Source language where the prediction was found
-        selected:
-          type: number
-          description: 'Whether or not the label was selected in the affirmative or not: 1 for selected and 0 for unselected'
-      description: Details for a given predicted label
-    PredictionDetail:
-      type: object
-      properties:
-        contract_id:
-          type: string
-          description: ID of the contract
-        details:
-          type: array
-          items:
-            $ref: '#/components/schemas/PredictionDetailTopic'
-      description: Fetch predicted labels and associated details for the given contract by topic
-    PredictionDetailTopic:
-      type: object
-      properties:
-        topic_id:
-          type: number
-          description: ID of the topic
-        topic_name:
-          type: string
-          description: Name of the topic
-        predictions:
-          type: array
-          items:
-            $ref: '#/components/schemas/PredictionDetailLabel'
-      description: Topic metadata and label predictions for the given topic
+          description: ID of document created
     PlaybookPassFailDetail:
       type: object
       properties:
@@ -715,10 +549,71 @@ components:
           type: string
           description: ID of the label
       description: Detailed list of labels that passed or failed and why
-    Citations:
-      type: array
-      items:
-        $ref: '#/components/schemas/Citation'
+    Citation:
+      title: Citation
+      type: object
+      properties:
+        citations:
+          type: string
+          description: Citation
+        source_langauge:
+          type: string
+          description: Source language of the citation
+    PredictionDetailTopic:
+      type: object
+      properties:
+        topic_id:
+          type: number
+          description: ID of the topic
+        topic_name:
+          type: string
+          description: Name of the topic
+        predictions:
+          type: array
+          items:
+            $ref: '#/components/schemas/PredictionDetailLabel'
+      description: Topic metadata and label predictions for the given topic
+    ExtractedField:
+      type: object
+      properties:
+        extracted_field_id:
+          type: number
+          description: ID of extracted field
+          format: integer
+        contract_id:
+          type: string
+          description: ID of given contract
+        extracted_field_measurement_id:
+          type: number
+          description: ID of measurement
+          format: integer
+        extracted_field_data_type_id:
+          type: number
+          description: ID of extracted field data type
+          format: integer
+        source_id:
+          type: number
+          description: ID of the source/citation that references the extracted field value
+          format: integer
+        value:
+          type: string
+          description: Value of the extracted field
+        extracted_field_name:
+          type: string
+          description: Name of the extracted field
+        measurement_name:
+          type: string
+          description: Name of the measurement type. Used for adding context to the value. Examples include some common units of measurements for time and currencies, e.g., `USD` or `Days`
+        type_name:
+          type: string
+          description: Name of data type of the given value
+        source_language:
+          type: string
+          description: Source language of contract that references the extracted field value
+        citation:
+          type: string
+          description: 'Name of the citation in the contract that references the extracted field value '
+      description: Key data point extracted from the contract
     PredictionFlagsDetail:
       type: object
       properties:
@@ -733,6 +628,10 @@ components:
           items:
             $ref: '#/components/schemas/PredictionFlag'
       description: List of perspectives containing red flag count and details
+    Citations:
+      type: array
+      items:
+        $ref: '#/components/schemas/Citation'
     ContractOverview:
       type: object
       properties:
@@ -841,25 +740,126 @@ components:
           description: DEPRECATED
           deprecated: true
       description: Contract overview and general metadata
-    ContractUpload:
+    PredictionDetail:
       type: object
       properties:
         contract_id:
           type: string
-          description: ID of newly created contract
-        document_id:
-          type: string
-          description: ID of document created
-    Citation:
-      title: Citation
+          description: ID of the contract
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/PredictionDetailTopic'
+      description: Fetch predicted labels and associated details for the given contract by topic
+    ContractStatus:
       type: object
       properties:
-        citations:
+        contract_id:
           type: string
-          description: Citation
-        source_langauge:
+          description: ID of given contract
+        status:
           type: string
-          description: Source language of the citation
+          description: 'Status of given contract. Will be either: `In Progress` or `Completed`'
+          enum:
+          - In Progress
+          - Completed
+          - Failed
+    ExtractedFields:
+      type: array
+      items:
+        $ref: '#/components/schemas/ExtractedField'
+    ContractList:
+      type: array
+      description: Item for ContractList, contains contract status and basic information
+      items:
+        type: object
+        properties:
+          contract_id:
+            type: string
+            description: ID of the ontract
+          status:
+            type: string
+            description: Status of the contract
+          template_id:
+            type: number
+            description: Template id of the contract
+          primary_agreement:
+            type: string
+            description: Primary agreement name of the contract
+    PredictionSummary:
+      type: object
+      properties:
+        contract_id:
+          type: string
+          description: ID of the contract
+        topic_id:
+          type: number
+          description: ID of the topic
+        summary:
+          type: string
+          description: Summary of predicted labels for the given topic
+      description: Summary of predicted labels for a given contract and topic
+    PredictionFlag:
+      type: object
+      properties:
+        label_id:
+          type: number
+          description: ID of the label
+        label_display:
+          type: string
+          description: Display name of the label
+        confidence:
+          type: number
+          description: Prediction confidence
+        defined_term:
+          type: string
+          description: Defined term of the document where the prediction was found
+        citation:
+          type: string
+          description: Section identifier where the prediction was found
+        source_language:
+          type: string
+          description: Source language where the prediction was found
+        selected:
+          type: number
+          description: 'Whether or not the label was selected in the affirmative or not: 1 for selected and 0 for unselected'
+      description: Details for a given red flag
+    PredictionDetailLabel:
+      type: object
+      properties:
+        label_id:
+          type: number
+          description: ID of the label
+        label_display:
+          type: string
+          description: Display name of the label
+        confidence:
+          type: number
+          description: Prediction confidence
+        defined_term:
+          type: string
+          description: Defined term of the document where the prediction was found
+        citation:
+          type: string
+          description: Section identifier where the prediction was found
+        source_language:
+          type: string
+          description: Source language where the prediction was found
+        selected:
+          type: number
+          description: 'Whether or not the label was selected in the affirmative or not: 1 for selected and 0 for unselected'
+      description: Details for a given predicted label
+    PredictionFlags:
+      type: object
+      properties:
+        contract_id:
+          type: string
+          description: ID of the contract
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/PredictionFlagsDetail'
+      description: Predicted red flags for the given contract
   securitySchemes:
     api_key:
       type: apiKey
