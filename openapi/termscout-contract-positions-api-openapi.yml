@@ -76,6 +76,11 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
+    ContractPositions:
+      type: array
+      description: Frequency counts for all relevant contract positions
+      items:
+        $ref: '#/components/schemas/ContractPosition'
     ContractPosition:
       type: object
       properties:
@@ -90,11 +95,6 @@ components:
           type: string
           description: Number of contracts that meet that meet the criteria defined by the input query parameters
       description: Frequency count for the given contract position
-    ContractPositions:
-      type: array
-      description: Frequency counts for all relevant contract positions
-      items:
-        $ref: '#/components/schemas/ContractPosition'
   securitySchemes:
     api_key:
       type: apiKey
