@@ -456,133 +456,6 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    ContractList:
-      type: array
-      description: Item for ContractList, contains contract status and basic information
-      items:
-        type: object
-        properties:
-          contract_id:
-            type: string
-            description: ID of the ontract
-          status:
-            type: string
-            description: Status of the contract
-          template_id:
-            type: number
-            description: Template id of the contract
-          primary_agreement:
-            type: string
-            description: Primary agreement name of the contract
-    PlaybookPassFailDetail:
-      type: object
-      properties:
-        selection:
-          type: string
-          description: 'Description of how the label should appear in the contract. Will be one of the following: `required`, `acceptable` or `unacceptable`'
-        reason:
-          type: string
-          description: 'Reason why the label passed or failed. Will be one of the following: `required_and_found`, `required_not_found`, `acceptable_and_found`, `acceptable_not_found`, `unacceptable_and_found`, `unacceptable_not_found`'
-        is_fail:
-          type: number
-          description: Result if label passed or failed
-        label_id:
-          type: string
-          description: ID of the label
-      description: Detailed list of labels that passed or failed and why
-    PredictionFlag:
-      type: object
-      properties:
-        label_id:
-          type: number
-          description: ID of the label
-        label_display:
-          type: string
-          description: Display name of the label
-        confidence:
-          type: number
-          description: Prediction confidence
-        defined_term:
-          type: string
-          description: Defined term of the document where the prediction was found
-        citation:
-          type: string
-          description: Section identifier where the prediction was found
-        source_language:
-          type: string
-          description: Source language where the prediction was found
-        selected:
-          type: number
-          description: 'Whether or not the label was selected in the affirmative or not: 1 for selected and 0 for unselected'
-      description: Details for a given red flag
-    PlaybookDetail:
-      type: object
-      properties:
-        tier:
-          type: number
-          description: Tier level of the question. Lower number tiers have a greater influence on score.
-        issue_number:
-          type: string
-          description: Numerical ordering of clauses, grouped by tiers
-        filter_question_id:
-          type: number
-          description: ID of the filter question
-        question_id:
-          type: number
-          description: ID of the question
-        display_name:
-          type: string
-          description: Display name of the filter question
-        answer_display:
-          type: string
-          description: Short answer if question was addressed in contract. Can be `Yes`, `No`, `N\A` or `Null`
-        filter_passed:
-          type: boolean
-          description: Result if the contract passed the filter question
-        footnote:
-          type: string
-          description: Footnotes to the customer
-        rank:
-          type: number
-          description: Rank
-        citation:
-          type: string
-          description: Citation to the contract contract that refers to this question
-        selected_label_ids:
-          type: array
-          description: DEPRECATED
-          items:
-            type: number
-          deprecated: true
-        unselected_label_ids:
-          type: array
-          description: DEPRECATED
-          items:
-            type: number
-          deprecated: true
-        required_label_ids:
-          type: array
-          description: DEPRECATED
-          items:
-            type: number
-          deprecated: true
-        acceptable_label_ids:
-          type: array
-          description: DEPRECATED
-          items:
-            type: number
-          deprecated: true
-        unacceptable_label_ids:
-          type: array
-          description: DEPRECATED
-          items:
-            type: number
-          deprecated: true
-        details:
-          type: array
-          items:
-            $ref: '#/components/schemas/PlaybookPassFailDetail'
-      description: Detailed reasons why a playbook question failed
     ExtractedField:
       type: object
       properties:
@@ -624,69 +497,7 @@ components:
           type: string
           description: 'Name of the citation in the contract that references the extracted field value '
       description: Key data point extracted from the contract
-    Citation:
-      title: Citation
-      type: object
-      properties:
-        citations:
-          type: string
-          description: Citation
-        source_langauge:
-          type: string
-          description: Source language of the citation
-    PredictionDetail:
-      type: object
-      properties:
-        contract_id:
-          type: string
-          description: ID of the contract
-        details:
-          type: array
-          items:
-            $ref: '#/components/schemas/PredictionDetailTopic'
-      description: Fetch predicted labels and associated details for the given contract by topic
-    PredictionFlagsDetail:
-      type: object
-      properties:
-        name:
-          type: string
-          description: Perspective name, eg. Customer, Vendor
-        flag_count:
-          type: number
-          description: Number of red flags identified for the given perspective
-        flags:
-          type: array
-          items:
-            $ref: '#/components/schemas/PredictionFlag'
-      description: List of perspectives containing red flag count and details
-    ContractUpload:
-      type: object
-      properties:
-        contract_id:
-          type: string
-          description: ID of newly created contract
-        document_id:
-          type: string
-          description: ID of document created
-    PredictionDetailTopic:
-      type: object
-      properties:
-        topic_id:
-          type: number
-          description: ID of the topic
-        topic_name:
-          type: string
-          description: Name of the topic
-        predictions:
-          type: array
-          items:
-            $ref: '#/components/schemas/PredictionDetailLabel'
-      description: Topic metadata and label predictions for the given topic
-    Citations:
-      type: array
-      items:
-        $ref: '#/components/schemas/Citation'
-    PredictionDetailLabel:
+    PredictionFlag:
       type: object
       properties:
         label_id:
@@ -710,7 +521,73 @@ components:
         selected:
           type: number
           description: 'Whether or not the label was selected in the affirmative or not: 1 for selected and 0 for unselected'
-      description: Details for a given predicted label
+      description: Details for a given red flag
+    PredictionDetail:
+      type: object
+      properties:
+        contract_id:
+          type: string
+          description: ID of the contract
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/PredictionDetailTopic'
+      description: Fetch predicted labels and associated details for the given contract by topic
+    ContractList:
+      type: array
+      description: Item for ContractList, contains contract status and basic information
+      items:
+        type: object
+        properties:
+          contract_id:
+            type: string
+            description: ID of the ontract
+          status:
+            type: string
+            description: Status of the contract
+          template_id:
+            type: number
+            description: Template id of the contract
+          primary_agreement:
+            type: string
+            description: Primary agreement name of the contract
+    PredictionDetailTopic:
+      type: object
+      properties:
+        topic_id:
+          type: number
+          description: ID of the topic
+        topic_name:
+          type: string
+          description: Name of the topic
+        predictions:
+          type: array
+          items:
+            $ref: '#/components/schemas/PredictionDetailLabel'
+      description: Topic metadata and label predictions for the given topic
+    Citation:
+      title: Citation
+      type: object
+      properties:
+        citations:
+          type: string
+          description: Citation
+        source_langauge:
+          type: string
+          description: Source language of the citation
+    ContractStatus:
+      type: object
+      properties:
+        contract_id:
+          type: string
+          description: ID of given contract
+        status:
+          type: string
+          description: 'Status of given contract. Will be either: `In Progress` or `Completed`'
+          enum:
+          - In Progress
+          - Completed
+          - Failed
     ContractOverview:
       type: object
       properties:
@@ -819,17 +696,35 @@ components:
           description: DEPRECATED
           deprecated: true
       description: Contract overview and general metadata
-    PredictionFlags:
+    PredictionDetailLabel:
       type: object
       properties:
-        contract_id:
+        label_id:
+          type: number
+          description: ID of the label
+        label_display:
           type: string
-          description: ID of the contract
-        details:
-          type: array
-          items:
-            $ref: '#/components/schemas/PredictionFlagsDetail'
-      description: Predicted red flags for the given contract
+          description: Display name of the label
+        confidence:
+          type: number
+          description: Prediction confidence
+        defined_term:
+          type: string
+          description: Defined term of the document where the prediction was found
+        citation:
+          type: string
+          description: Section identifier where the prediction was found
+        source_language:
+          type: string
+          description: Source language where the prediction was found
+        selected:
+          type: number
+          description: 'Whether or not the label was selected in the affirmative or not: 1 for selected and 0 for unselected'
+      description: Details for a given predicted label
+    Citations:
+      type: array
+      items:
+        $ref: '#/components/schemas/Citation'
     PredictionSummary:
       type: object
       properties:
@@ -843,23 +738,128 @@ components:
           type: string
           description: Summary of predicted labels for the given topic
       description: Summary of predicted labels for a given contract and topic
-    ContractStatus:
+    PredictionFlags:
       type: object
       properties:
         contract_id:
           type: string
-          description: ID of given contract
-        status:
+          description: ID of the contract
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/PredictionFlagsDetail'
+      description: Predicted red flags for the given contract
+    ContractUpload:
+      type: object
+      properties:
+        contract_id:
           type: string
-          description: 'Status of given contract. Will be either: `In Progress` or `Completed`'
-          enum:
-          - In Progress
-          - Completed
-          - Failed
+          description: ID of newly created contract
+        document_id:
+          type: string
+          description: ID of document created
     ExtractedFields:
       type: array
       items:
         $ref: '#/components/schemas/ExtractedField'
+    PlaybookPassFailDetail:
+      type: object
+      properties:
+        selection:
+          type: string
+          description: 'Description of how the label should appear in the contract. Will be one of the following: `required`, `acceptable` or `unacceptable`'
+        reason:
+          type: string
+          description: 'Reason why the label passed or failed. Will be one of the following: `required_and_found`, `required_not_found`, `acceptable_and_found`, `acceptable_not_found`, `unacceptable_and_found`, `unacceptable_not_found`'
+        is_fail:
+          type: number
+          description: Result if label passed or failed
+        label_id:
+          type: string
+          description: ID of the label
+      description: Detailed list of labels that passed or failed and why
+    PlaybookDetail:
+      type: object
+      properties:
+        tier:
+          type: number
+          description: Tier level of the question. Lower number tiers have a greater influence on score.
+        issue_number:
+          type: string
+          description: Numerical ordering of clauses, grouped by tiers
+        filter_question_id:
+          type: number
+          description: ID of the filter question
+        question_id:
+          type: number
+          description: ID of the question
+        display_name:
+          type: string
+          description: Display name of the filter question
+        answer_display:
+          type: string
+          description: Short answer if question was addressed in contract. Can be `Yes`, `No`, `N\A` or `Null`
+        filter_passed:
+          type: boolean
+          description: Result if the contract passed the filter question
+        footnote:
+          type: string
+          description: Footnotes to the customer
+        rank:
+          type: number
+          description: Rank
+        citation:
+          type: string
+          description: Citation to the contract contract that refers to this question
+        selected_label_ids:
+          type: array
+          description: DEPRECATED
+          items:
+            type: number
+          deprecated: true
+        unselected_label_ids:
+          type: array
+          description: DEPRECATED
+          items:
+            type: number
+          deprecated: true
+        required_label_ids:
+          type: array
+          description: DEPRECATED
+          items:
+            type: number
+          deprecated: true
+        acceptable_label_ids:
+          type: array
+          description: DEPRECATED
+          items:
+            type: number
+          deprecated: true
+        unacceptable_label_ids:
+          type: array
+          description: DEPRECATED
+          items:
+            type: number
+          deprecated: true
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/PlaybookPassFailDetail'
+      description: Detailed reasons why a playbook question failed
+    PredictionFlagsDetail:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Perspective name, eg. Customer, Vendor
+        flag_count:
+          type: number
+          description: Number of red flags identified for the given perspective
+        flags:
+          type: array
+          items:
+            $ref: '#/components/schemas/PredictionFlag'
+      description: List of perspectives containing red flag count and details
   securitySchemes:
     api_key:
       type: apiKey
