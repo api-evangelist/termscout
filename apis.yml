@@ -53,7 +53,7 @@ x-tier: profiled
 x-tier-reason: published-openapi-harvested
 specificationVersion: '0.23'
 created: '2026-07-17'
-modified: '2026-08-14'
+modified: '2026-10-06'
 tags:
 - Company
 - Legal Tech
@@ -133,6 +133,8 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 common:
+- url: https://blog.termscout.com/rss.xml
+  type: BlogRSS
 - type: CapabilityMap
   url: capabilities/termscout-capability-edges.yml
   name: TermScout Business Capability Map
