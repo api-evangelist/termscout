@@ -133,6 +133,8 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: RateLimits
+  url: rate-limits/termscout-rate-limits.yml
 - url: https://blog.termscout.com/rss.xml
   type: BlogRSS
 - type: CapabilityMap
